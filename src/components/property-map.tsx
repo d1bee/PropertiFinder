@@ -3,48 +3,54 @@
 import { useState } from 'react';
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
 import type { Property } from '@/lib/data';
-import { PropertyCard } from './property-card';
 
 type PropertyMapProps = {
   properties: Property[];
   apiKey: string;
+  onMarkerClick: (property: Property) => void;
 };
 
-export function PropertyMap({ properties, apiKey }: PropertyMapProps) {
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+    notation: 'compact',
+  }).format(price / 16000); // Approximate conversion
+};
 
-  const center = { lat: -6.2, lng: 106.816666 }; // Jakarta
+export function PropertyMap({ properties, apiKey, onMarkerClick }: PropertyMapProps) {
+  const [infoWindow, setInfoWindow] = useState<{ property: Property } | null>(null);
 
+  const center = { lat: 40.7128, lng: -74.0060 }; // New York
+
+  const handleMarkerClick = (property: Property) => {
+    setInfoWindow({ property });
+    onMarkerClick(property);
+  };
+  
   return (
     <APIProvider apiKey={apiKey}>
       <Map
         defaultCenter={center}
-        defaultZoom={10}
-        mapId="PROPERTI_FINDER_MAP"
+        defaultZoom={12}
+        mapId="PROPERTI_FINDER_MAP_NEW"
         gestureHandling={'greedy'}
         disableDefaultUI={true}
+        className="rounded-lg"
       >
         {properties.map((property) => (
           <AdvancedMarker
             key={property.id}
             position={property.coordinates}
-            onClick={() => setSelectedProperty(property)}
+            onClick={() => handleMarkerClick(property)}
           >
-            <Pin background={'hsl(var(--primary))'} borderColor={'hsl(var(--card))'} glyphColor={'hsl(var(--card))'} />
+             <div className="px-2 py-1 bg-card text-card-foreground rounded-full shadow-md text-sm font-semibold border">
+              {formatPrice(property.price)}
+            </div>
           </AdvancedMarker>
         ))}
-
-        {selectedProperty && (
-          <InfoWindow
-            position={selectedProperty.coordinates}
-            onCloseClick={() => setSelectedProperty(null)}
-            pixelOffset={[0,-35]}
-          >
-            <div className="w-80">
-                <PropertyCard property={selectedProperty} />
-            </div>
-          </InfoWindow>
-        )}
       </Map>
     </APIProvider>
   );

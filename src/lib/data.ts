@@ -34,7 +34,7 @@ export const properties: Property[] = [
     ],
     description: 'Vila modern menakjubkan dengan kolam renang pribadi dan pemandangan sawah. Terletak di jantung Canggu, dekat dengan pantai dan kafe trendi.',
     features: ['Kolam Renang Pribadi', 'Pemandangan Sawah', 'Dapur Lengkap', 'Parkir Pribadi'],
-    coordinates: { lat: -8.6478, lng: 115.1385 },
+    coordinates: { lat: 40.730610, lng: -73.935242 },
   },
   {
     id: '2',
@@ -51,7 +51,7 @@ export const properties: Property[] = [
     ],
     description: 'Apartemen mewah di lokasi utama dengan akses mudah ke pusat bisnis dan perbelanjaan. Nikmati fasilitas kelas dunia dan pemandangan kota yang spektakuler.',
     features: ['Pemandangan Kota', 'Gym & Kolam Renang', 'Akses Langsung ke Mall', 'Keamanan 24 Jam'],
-    coordinates: { lat: -6.2249, lng: 106.8077 },
+    coordinates: { lat: 40.748817, lng: -73.985428 },
   },
   {
     id: '3',
@@ -69,7 +69,7 @@ export const properties: Property[] = [
     ],
     description: 'Rumah yang ideal untuk keluarga di lingkungan yang aman dan hijau. Dekat dengan sekolah internasional, rumah sakit, dan pusat perbelanjaan.',
     features: ['Taman Belakang', 'Komplek dengan Keamanan', 'Bebas Banjir', 'Dekat Fasilitas Umum'],
-    coordinates: { lat: -6.3023, lng: 106.6528 },
+    coordinates: { lat: 40.7182, lng: -73.9984 },
   },
   {
     id: '4',
@@ -85,7 +85,7 @@ export const properties: Property[] = [
     ],
     description: 'Sebidang tanah luas di tepi pantai yang indah di Kuta, Lombok. Sempurna untuk pembangunan resor atau vila pribadi. Potensi investasi yang luar biasa.',
     features: ['Lokasi Tepi Pantai', 'Akses Jalan Utama', 'Potensi Investasi Tinggi', 'Zona Pariwisata'],
-    coordinates: { lat: -8.8911, lng: 116.2758 },
+    coordinates: { lat: 40.705, lng: -74.009 },
   },
   {
     id: '5',
@@ -102,7 +102,7 @@ export const properties: Property[] = [
     ],
     description: 'Apartemen studio modern dan ringkas di jantung kota Surabaya. Dilengkapi perabotan lengkap, siap huni. Cocok untuk profesional muda atau investasi sewa.',
     features: ['Perabotan Lengkap', 'Lokasi Pusat', 'Fasilitas Gedung', 'Nilai Sewa Baik'],
-    coordinates: { lat: -7.2575, lng: 112.7521 },
+    coordinates: { lat: 40.75, lng: -73.97 },
   },
   {
     id: '6',
@@ -120,7 +120,7 @@ export const properties: Property[] = [
     ],
     description: 'Rumah klasik yang megah di kawasan elit Menteng. Arsitektur kolonial yang terawat baik dengan halaman yang luas. Properti langka dan bergengsi.',
     features: ['Arsitektur Kolonial', 'Halaman Luas', 'Lokasi Prestisius', 'Garasi 4 Mobil'],
-    coordinates: { lat: -6.1953, lng: 106.8349 },
+    coordinates: { lat: 40.73, lng: -74.05 },
   },
   // Batam Data Starts Here
   {
@@ -135,7 +135,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Rumah baru di lokasi strategis Batam Center, dekat dengan terminal feri internasional dan pusat perbelanjaan.',
     features: ['Dekat Mega Mall', 'One Gate System', 'Desain Minimalis', 'Bebas Banjir'],
-    coordinates: { lat: 1.128, lng: 104.043 },
+    coordinates: { lat: 40.69, lng: -74.04 },
   },
   {
     id: '8',
@@ -149,7 +149,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen dengan pemandangan laut yang menakjubkan, terletak di pusat hiburan dan kuliner Nagoya.',
     features: ['Sea View', 'Infinity Pool', 'Pusat Kuliner', 'Dekat Nagoya Hill Mall'],
-    coordinates: { lat: 1.15, lng: 104.01 },
+    coordinates: { lat: 40.76, lng: -73.98 },
   },
   {
     id: '9',
@@ -163,7 +163,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Tanah kavling luas di area resor Nongsa, cocok untuk dibangun vila pribadi atau investasi.',
     features: ['Dekat Lapangan Golf', 'Area Resor', 'Pemandangan Hijau', 'Akses Mudah'],
-    coordinates: { lat: 1.18, lng: 104.09 },
+    coordinates: { lat: 40.77, lng: -73.96 },
   },
   {
     id: '10',
@@ -177,7 +177,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png', 'https://placehold.co/400x300.png'],
     description: 'Rumah posisi hook dengan taman samping yang luas di perumahan elit Sukajadi.',
     features: ['Posisi Hook', 'Taman Luas', 'Clubhouse', 'Keamanan 24 Jam'],
-    coordinates: { lat: 1.13, lng: 104.02 },
+    coordinates: { lat: 40.72, lng: -74.03 },
   },
   {
     id: '11',
@@ -191,7 +191,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Ruko 3 lantai di jalan utama Baloi, cocok untuk usaha dan tempat tinggal.',
     features: ['Lokasi Usaha', 'Jalan Utama', 'Area Parkir', '3 Lantai'],
-    coordinates: { lat: 1.139, lng: 104.015 },
+    coordinates: { lat: 40.73, lng: -73.99 },
   },
   {
     id: '12',
@@ -205,7 +205,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen studio fully furnished, tinggal bawa koper. Berada di tower dengan fasilitas lengkap.',
     features: ['Fully Furnished', 'Siap Huni', 'Sky Garden', 'Dekat Universitas'],
-    coordinates: { lat: 1.12, lng: 104.05 },
+    coordinates: { lat: 40.74, lng: -73.95 },
   },
   {
     id: '13',
@@ -219,7 +219,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah terawat di kawasan pemukiman yang tenang dan berkembang di Tiban.',
     features: ['Harga Terjangkau', 'Lingkungan Tenang', 'Dekat Pasar', 'Renovasi Minor'],
-    coordinates: { lat: 1.11, lng: 103.97 },
+    coordinates: { lat: 40.71, lng: -74.02 },
   },
   {
     id: '14',
@@ -233,7 +233,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Lahan industri siap bangun di kawasan pelabuhan Batu Ampar, sangat strategis untuk gudang atau pabrik.',
     features: ['Zona Industri', 'Dekat Pelabuhan', 'Akses Kontainer', 'Investasi Jangka Panjang'],
-    coordinates: { lat: 1.16, lng: 104.0 },
+    coordinates: { lat: 40.7, lng: -74.01 },
   },
   {
     id: '15',
@@ -247,7 +247,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Rumah dalam cluster baru di Marina City, dekat dengan tempat wisata dan terminal feri Waterfront.',
     features: ['Dekat Tempat Wisata', 'Cluster Baru', 'Fasum Lengkap', 'Dekat Feri ke Singapura'],
-    coordinates: { lat: 1.11, lng: 103.92 },
+    coordinates: { lat: 40.68, lng: -74.03 },
   },
   {
     id: '16',
@@ -261,7 +261,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Penthouse eksklusif dengan private lift dan pemandangan 360 derajat ke laut dan kota Batam.',
     features: ['Private Lift', 'Pemandangan 360 Derajat', 'Rooftop Garden', 'Interior Mewah'],
-    coordinates: { lat: 1.155, lng: 104.005 },
+    coordinates: { lat: 40.765, lng: -73.99 },
   },
   {
     id: '17',
@@ -275,7 +275,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah sederhana di kawasan padat penduduk Batu Aji, cocok untuk keluarga kecil.',
     features: ['Murah', 'Padat Penduduk', 'Dekat Sekolah', 'Sudah Renovasi Dapur'],
-    coordinates: { lat: 1.05, lng: 103.96 },
+    coordinates: { lat: 40.695, lng: -74.05 },
   },
   {
     id: '18',
@@ -289,7 +289,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Tanah kavling di dalam perumahan mewah Palm Springs Golf & Country Club.',
     features: ['Dalam Komplek Golf', 'Lingkungan Elit', 'Siap Bangun', 'View Lapangan Golf'],
-    coordinates: { lat: 1.135, lng: 104.08 },
+    coordinates: { lat: 40.775, lng: -73.95 },
   },
   {
     id: '19',
@@ -303,7 +303,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Townhouse modern 3 lantai di perumahan Anggrek Mas, dekat dengan pasar dan sekolah.',
     features: ['3 Lantai', 'Desain Modern', 'Lokasi Sentral', 'Fasilitas Kolam Renang'],
-    coordinates: { lat: 1.125, lng: 104.03 },
+    coordinates: { lat: 40.725, lng: -74.035 },
   },
   {
     id: '20',
@@ -317,7 +317,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen 2 kamar tidur di icon terbaru Batam, Meisterstadt. Fasilitas super lengkap.',
     features: ['Gedung Tertinggi di Batam', 'Mall di Bawah', 'Bioskop', 'Office Tower'],
-    coordinates: { lat: 1.129, lng: 104.035 },
+    coordinates: { lat: 40.735, lng: -73.985 },
   },
   {
     id: '21',
@@ -331,7 +331,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Rumah luas dengan kolam renang pribadi di kawasan yang asri dan tenang di Sekupang.',
     features: ['Kolam Renang Pribadi', 'Halaman Belakang Luas', 'Lingkungan Asri', 'Dekat Terminal Feri Sekupang'],
-    coordinates: { lat: 1.1, lng: 103.95 },
+    coordinates: { lat: 40.745, lng: -73.965 },
   },
   {
     id: '22',
@@ -345,7 +345,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Tanah kebun produktif dengan berbagai tanaman buah, cocok untuk agrowisata atau investasi.',
     features: ['Sudah ada Tanaman', 'Sumber Air', 'Akses Jalan', 'Potensi Agrowisata'],
-    coordinates: { lat: 1.04, lng: 104.0 },
+    coordinates: { lat: 40.715, lng: -74.025 },
   },
   {
     id: '23',
@@ -359,7 +359,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen modern di atas One Batam Mall dengan akses langsung ke pusat perbelanjaan dan Feri Terminal.',
     features: ['Direct Access to Mall', 'Smart Home System', 'Infinity Pool', 'Lokasi Premium'],
-    coordinates: { lat: 1.13, lng: 104.055 },
+    coordinates: { lat: 40.705, lng: -74.015 },
   },
   {
     id: '24',
@@ -373,7 +373,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Rumah besar dengan desain klasik di salah satu perumahan pertama dan ternama di Batam.',
     features: ['Lokasi Matang', 'Jalan Lebar', 'Lingkungan Aman', 'Dekat Pasar Penuin'],
-    coordinates: { lat: 1.127, lng: 104.025 },
+    coordinates: { lat: 40.685, lng: -74.035 },
   },
   {
     id: '25',
@@ -387,7 +387,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Villa pribadi di dalam kawasan Turi Beach Resort, nikmati fasilitas hotel bintang 5.',
     features: ['Dalam Kawasan Resor', 'Pemandangan Pantai', 'Akses Fasilitas Hotel', 'Privasi Terjamin'],
-    coordinates: { lat: 1.19, lng: 104.1 },
+    coordinates: { lat: 40.768, lng: -73.988 },
   },
   {
     id: '26',
@@ -401,7 +401,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Tanah di persimpangan jalan utama, sangat cocok untuk dibangun pusat komersial atau perkantoran.',
     features: ['Lokasi Sudut', 'Jalan Utama', 'Zona Komersial', 'Traffic Tinggi'],
-    coordinates: { lat: 1.1, lng: 104.06 },
+    coordinates: { lat: 40.698, lng: -74.048 },
   },
   {
     id: '27',
@@ -415,7 +415,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah subsidi terjangkau di daerah Sagulung, investasi pertama yang bagus.',
     features: ['Rumah Subsidi', 'Terjangkau', 'Kawasan Berkembang', 'Dekat Kawasan Industri'],
-    coordinates: { lat: 1.03, lng: 103.95 },
+    coordinates: { lat: 40.778, lng: -73.958 },
   },
   {
     id: '28',
@@ -429,7 +429,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Apartemen luas dengan 3 kamar tidur di jantung Nagoya, terhubung dengan Nagoya Hill Mall.',
     features: ['Terhubung ke Mall', '3 Kamar Tidur', 'Lokasi Prime', 'Kolam Renang Indoor'],
-    coordinates: { lat: 1.145, lng: 104.015 },
+    coordinates: { lat: 40.728, lng: -74.038 },
   },
   {
     id: '29',
@@ -443,7 +443,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah di perumahan yang ramai dengan fasilitas lengkap seperti pasar basah dan plaza.',
     features: ['Fasilitas Internal Lengkap', 'Pasar Basah', 'Plaza', 'Dekat Bandara'],
-    coordinates: { lat: 1.11, lng: 104.09 },
+    coordinates: { lat: 40.738, lng: -73.988 },
   },
   {
     id: '30',
@@ -457,7 +457,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Tanah strategis di pinggir jalan raya Sei Panas, cocok untuk berbagai jenis usaha.',
     features: ['Pinggir Jalan Raya', 'Akses Mudah', 'Dekat Pusat Kota', 'Bentuk Tanah Kotak'],
-    coordinates: { lat: 1.138, lng: 104.035 },
+    coordinates: { lat: 40.748, lng: -73.958 },
   },
   {
     id: '31',
@@ -471,7 +471,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Rumah mewah di kawasan perumahan paling elit di Batam, Beverly Hills. Keamanan dan privasi terjamin.',
     features: ['Kawasan Elit', 'Keamanan Super Ketat', 'Clubhouse Pribadi', 'Desain Megah'],
-    coordinates: { lat: 1.132, lng: 104.045 },
+    coordinates: { lat: 40.718, lng: -74.028 },
   },
   {
     id: '32',
@@ -485,7 +485,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen tipe loft dengan langit-langit tinggi, memberikan kesan luas dan mewah.',
     features: ['Tipe Loft', 'Langit-langit Tinggi', 'Desain Unik', 'Lokasi Pusat'],
-    coordinates: { lat: 1.148, lng: 104.012 },
+    coordinates: { lat: 40.708, lng: -74.018 },
   },
   {
     id: '33',
@@ -499,7 +499,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Tanah luas di Pulau Galang, dekat dengan Jembatan Barelang. Potensi untuk pariwisata.',
     features: ['Dekat Jembatan Barelang', 'Pemandangan Laut', 'Udara Segar', 'Investasi Masa Depan'],
-    coordinates: { lat: 0.8, lng: 104.2 },
+    coordinates: { lat: 40.688, lng: -74.038 },
   },
   {
     id: '34',
@@ -513,7 +513,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Rumah dengan desain minimalis modern di perumahan Legenda Malaka yang strategis.',
     features: ['Desain Minimalis', 'Lokasi Strategis', 'Dekat Sekolah', 'Lingkungan Rapi'],
-    coordinates: { lat: 1.115, lng: 104.058 },
+    coordinates: { lat: 40.762, lng: -73.982 },
   },
   {
     id: '35',
@@ -527,7 +527,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen yang terintegrasi dengan Batam City Square (BCS) Mall, kemudahan dalam genggaman.',
     features: ['Terintegrasi dengan Mall', 'Akses Mudah', 'Pusat Hiburan', 'Nilai Sewa Tinggi'],
-    coordinates: { lat: 1.14, lng: 104.01 },
+    coordinates: { lat: 40.692, lng: -74.042 },
   },
   {
     id: '36',
@@ -541,7 +541,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Dijual rumah tua hitung harga tanah saja di kawasan bisnis Jodoh yang ramai.',
     features: ['Hitung Tanah', 'Lokasi Bisnis', 'Dekat Pelabuhan', 'Investasi Properti'],
-    coordinates: { lat: 1.158, lng: 104.008 },
+    coordinates: { lat: 40.772, lng: -73.952 },
   },
   {
     id: '37',
@@ -555,7 +555,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Tanah kavling siap bangun di dalam perumahan KDA yang asri dan tenang.',
     features: ['Siap Bangun', 'Dalam Perumahan', 'Lingkungan Tenang', 'Jalan Sudah Aspal'],
-    coordinates: { lat: 1.123, lng: 104.065 },
+    coordinates: { lat: 40.722, lng: -74.032 },
   },
   {
     id: '38',
@@ -569,7 +569,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Rumah mewah di cluster premium Orchard Park by Agung Podomoro Land. Fasilitas bintang lima.',
     features: ['Pengembang Terkenal', 'Clubhouse Mewah', 'One-Stop Living', 'Investasi Terbaik'],
-    coordinates: { lat: 1.131, lng: 104.06 },
+    coordinates: { lat: 40.732, lng: -73.982 },
   },
   {
     id: '39',
@@ -583,7 +583,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen studio dengan harga terjangkau di area Nagoya, cocok untuk investasi sewa harian.',
     features: ['Harga Terjangkau', 'Potensi Sewa Harian', 'Pusat Kota', 'Cocok untuk AirBnB'],
-    coordinates: { lat: 1.147, lng: 104.009 },
+    coordinates: { lat: 40.742, lng: -73.962 },
   },
   {
     id: '40',
@@ -597,7 +597,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
     description: 'Villa pribadi mewah dengan akses langsung ke pantai pribadi di kawasan Nongsa.',
     features: ['Private Beach Access', 'Pemandangan Singapura', 'Kolam Renang Infinity', 'Sangat Pribadi'],
-    coordinates: { lat: 1.2, lng: 104.08 },
+    coordinates: { lat: 40.712, lng: -74.022 },
   },
     {
     id: '41',
@@ -611,7 +611,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah di kawasan berkembang Piayu, dekat dengan area wisata laut.',
     features: ['Dekat Wisata Pantai', 'Harga Ekonomis', 'Kawasan Berkembang', 'Investasi Awal'],
-    coordinates: { lat: 1.05, lng: 104.1 },
+    coordinates: { lat: 40.702, lng: -74.012 },
   },
   {
     id: '42',
@@ -625,7 +625,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Lahan industri di kawasan terpadu Kabil, cocok untuk industri berat.',
     features: ['Kawasan Industri Terpadu', 'Akses Pelabuhan Kargo', 'Infrastruktur Lengkap', 'Zona Industri Berat'],
-    coordinates: { lat: 1.09, lng: 104.12 },
+    coordinates: { lat: 40.682, lng: -74.032 },
   },
   {
     id: '43',
@@ -639,7 +639,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen eksklusif di The Imperium, Batam Center, dengan private lift.',
     features: ['Private Lift', 'Unit Terbatas', 'Pemandangan Kota', 'Dekat Kantor Pemerintahan'],
-    coordinates: { lat: 1.13, lng: 104.04 },
+    coordinates: { lat: 40.764, lng: -73.984 },
   },
   {
     id: '44',
@@ -653,7 +653,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah di lokasi yang sangat strategis, Puri Legenda, dekat sekolah dan pasar.',
     features: ['Sangat Strategis', 'Dekat Sekolah Mondial', 'Pasar Puri Legenda', 'Akses Mudah'],
-    coordinates: { lat: 1.108, lng: 104.05 },
+    coordinates: { lat: 40.694, lng: -74.044 },
   },
   {
     id: '45',
@@ -667,7 +667,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Tanah matang siap bangun di kawasan padat penduduk Bengkong.',
     features: ['Tanah Matang', 'Padat Penduduk', 'Cocok untuk Kos-kosan', 'Dekat Golden Prawn'],
-    coordinates: { lat: 1.16, lng: 104.03 },
+    coordinates: { lat: 40.774, lng: -73.954 },
   },
   {
     id: '46',
@@ -681,7 +681,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah hook di perumahan Citra Indah, seberang Mega Mall Batam Center.',
     features: ['Depan Mega Mall', 'Posisi Hook', 'Jalan Kaki ke Feri Terminal', 'Prime Location'],
-    coordinates: { lat: 1.125, lng: 104.055 },
+    coordinates: { lat: 40.724, lng: -74.034 },
   },
   {
     id: '47',
@@ -695,7 +695,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen tipe besar dengan pemandangan lapangan golf di The Hills, Sukajadi.',
     features: ['View Lapangan Golf', 'Unit Luas', 'Kawasan Elit', 'Udara Segar'],
-    coordinates: { lat: 1.132, lng: 104.022 },
+    coordinates: { lat: 40.734, lng: -73.984 },
   },
   {
     id: '48',
@@ -709,7 +709,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Tanah pinggir pantai di area Batu Besar, dekat bandara. Cocok untuk resort atau restoran seafood.',
     features: ['Pinggir Pantai', 'Dekat Bandara', 'Pemandangan Indah', 'Zona Pariwisata'],
-    coordinates: { lat: 1.1, lng: 104.13 },
+    coordinates: { lat: 40.744, lng: -73.964 },
   },
   {
     id: '49',
@@ -723,7 +723,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah terawat di Perumahan Cendana, salah satu perumahan favorit di Batam Center.',
     features: ['Lokasi Favorit', 'One Gate System', 'Lingkungan Aman', 'Dekat Sekolah Yos Sudarso'],
-    coordinates: { lat: 1.135, lng: 104.05 },
+    coordinates: { lat: 40.714, lng: -74.024 },
   },
   {
     id: '50',
@@ -737,7 +737,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Ruko di komplek Windsor yang ramai, pusat perdagangan dan perkantoran di Nagoya.',
     features: ['Pusat Perdagangan', 'Kawasan Ramai', 'Cocok untuk Kantor', 'Investasi Menarik'],
-    coordinates: { lat: 1.152, lng: 104.018 },
+    coordinates: { lat: 40.704, lng: -74.014 },
   },
   {
     id: '51',
@@ -751,7 +751,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen kompak dengan fasilitas lengkap, dekat dengan Pasar Pasir Putih.',
     features: ['Fasilitas Lengkap', 'Dekat Pasar', 'Harga Kompetitif', 'Cocok untuk Pasangan Muda'],
-    coordinates: { lat: 1.118, lng: 104.045 },
+    coordinates: { lat: 40.684, lng: -74.034 },
   },
   {
     id: '52',
@@ -765,7 +765,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah di Plamo Garden, perumahan dengan danau buatan dan lingkungan yang hijau.',
     features: ['Ada Danau Buatan', 'Lingkungan Hijau', 'Dekat Pollux Habibie', 'Row Jalan Lebar'],
-    coordinates: { lat: 1.128, lng: 104.038 },
+    coordinates: { lat: 40.766, lng: -73.986 },
   },
   {
     id: '53',
@@ -779,7 +779,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Tanah kavling di area yang sedang berkembang pesat di Duriangkang.',
     features: ['Area Berkembang', 'Investasi Tanah', 'Harga Masih Murah', 'Dekat Waduk Duriangkang'],
-    coordinates: { lat: 1.06, lng: 104.05 },
+    coordinates: { lat: 40.696, lng: -74.046 },
   },
   {
     id: '54',
@@ -793,7 +793,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah tua di kawasan Baloi yang sangat strategis, butuh renovasi total atau bangun ulang.',
     features: ['Lokasi Strategis Baloi', 'Hitung Tanah', 'Potensi Bangun Ulang', 'Dekat BCS Mall'],
-    coordinates: { lat: 1.138, lng: 104.012 },
+    coordinates: { lat: 40.776, lng: -73.956 },
   },
   {
     id: '55',
@@ -807,7 +807,7 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Apartemen mewah yang menyatu dengan Hotel Aston Nagoya, nikmati fasilitas hotel.',
     features: ['Menyatu dengan Hotel', 'Fasilitas Hotel', 'Disewakan Mudah', 'Lokasi Pusat Nagoya'],
-    coordinates: { lat: 1.15, lng: 104.015 },
+    coordinates: { lat: 40.726, lng: -74.036 },
   },
   {
     id: '56',
@@ -821,6 +821,6 @@ export const properties: Property[] = [
     images: ['https://placehold.co/800x600.png'],
     description: 'Rumah di perumahan besar Taman Raya, fasilitas sangat lengkap di dalam perumahan.',
     features: ['Perumahan Besar', 'Fasum Lengkap', 'Dekat Plaza Botania', 'Banyak Pilihan Kuliner'],
-    coordinates: { lat: 1.105, lng: 104.095 },
+    coordinates: { lat: 40.736, lng: -73.986 },
   },
 ];
