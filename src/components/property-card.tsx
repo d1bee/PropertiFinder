@@ -20,6 +20,7 @@ type PropertyCardProps = {
   onClose?: () => void;
   showCheckbox?: boolean;
   isDraggable?: boolean;
+  viewMode?: 'list' | 'map';
 };
 
 const formatPrice = (price: number) => {
@@ -55,7 +56,8 @@ export function PropertyCard({
   isFloating = false,
   onClose,
   showCheckbox = false,
-  isDraggable = false
+  isDraggable = false,
+  viewMode = 'list'
 }: PropertyCardProps) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (onClick) {
@@ -103,7 +105,7 @@ export function PropertyCard({
         <div className="flex justify-between items-start gap-2">
             <div>
                 <h3 className="font-semibold text-base leading-tight truncate" title={property.title}>
-                    <Link href={`/properties/${property.id}`} className="hover:underline" onClick={(e) => e.stopPropagation()}>{property.title}</Link>
+                    <Link href={`/properties/${property.id}?from=${viewMode}`} className="hover:underline" onClick={(e) => e.stopPropagation()}>{property.title}</Link>
                 </h3>
                 <p className="text-muted-foreground text-xs">{property.location}</p>
             </div>

@@ -1,16 +1,46 @@
+
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
+import { Suspense } from 'react';
 
-export function BackButton() {
+function BackButtonComponent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const from = searchParams.get('from');
+
+  const handleClick = () => {
+    if (from === 'map' || from === 'list') {
+      router.push('/properties');
+    } else {
+      router.back();
+    }
+  };
+
+  const getButtonText = () => {
+    if (from === 'map') {
+      return 'Kembali ke Peta';
+    }
+    if (from === 'list') {
+      return 'Kembali ke Daftar';
+    }
+    return 'Kembali ke hasil';
+  };
 
   return (
-    <Button variant="outline" onClick={() => router.back()} className="mb-4">
+    <Button variant="outline" onClick={handleClick} className="mb-4">
       <ChevronLeft className="h-4 w-4 mr-2" />
-      Back to results
+      {getButtonText()}
     </Button>
   );
+}
+
+export function BackButton() {
+  return (
+    <Suspense fallback={<div className="h-10 mb-4" />}>
+      <BackButtonComponent />
+    </Suspense>
+  )
 }

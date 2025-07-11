@@ -108,8 +108,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   }, [properties, filters]);
   
   const handleCardClick = useCallback((property: Property) => {
-     router.push(`/properties/${property.id}`);
-  }, [router]);
+     router.push(`/properties/${property.id}?from=${viewMode}`);
+  }, [router, viewMode]);
 
   const handleCardHover = useCallback((propertyId: string | null) => {
     setHoveredPropertyId(propertyId);
