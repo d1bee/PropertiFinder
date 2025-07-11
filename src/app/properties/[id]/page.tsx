@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { properties, type Property } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
-import { BedDouble, Bath, Square, CheckCircle, MapPin, Phone, MessageSquare } from 'lucide-react';
+import { BedDouble, Bath, Square, CheckCircle, MapPin, Phone, MessageSquare, LandPlot } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -110,8 +110,17 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                         <Square className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                        <p className="text-muted-foreground">Luas Area</p>
-                        <p className="font-semibold">{property.area} m²</p>
+                        <p className="text-muted-foreground">Luas Bangunan</p>
+                        <p className="font-semibold">{property.buildingArea > 0 ? `${property.buildingArea} m²` : 'N/A'}</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-accent rounded-lg">
+                        <LandPlot className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                        <p className="text-muted-foreground">Luas Tanah</p>
+                        <p className="font-semibold">{property.landArea > 0 ? `${property.landArea} m²` : 'N/A'}</p>
                     </div>
                 </div>
                  <div className="flex items-center gap-4">
@@ -196,3 +205,5 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
     </div>
   );
 }
+
+    

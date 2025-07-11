@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -77,7 +76,7 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
                         <span className="text-sm text-green-600 font-medium">Aktif</span>
                         <Badge variant="secondary" className="text-base font-bold">{formatPrice(property.price)}</Badge>
                         <p className="text-sm text-muted-foreground hidden lg:block truncate">
-                            {property.type} {property.beds > 0 ? `| ${property.beds} KT` : ''} {property.baths > 0 ? `| ${property.baths} KM` : ''} | {property.area} m²
+                            {property.type} {property.beds > 0 ? `| ${property.beds} KT` : ''} {property.baths > 0 ? `| ${property.baths} KM` : ''} | LB: {property.buildingArea} m²
                         </p>
                         </div>
                     </div>
@@ -100,3 +99,5 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
     </header>
   );
 }
+
+    
