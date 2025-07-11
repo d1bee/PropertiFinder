@@ -3,11 +3,10 @@
 
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { properties as initialProperties, type Property } from '@/lib/data';
+import { type Property } from '@/lib/data';
 import { PropertyMap } from '@/components/property-map';
 import { Header } from './header';
 import type { FilterState } from './property-search-filter';
-import { PropertyList } from './property-list';
 import { ScrollArea } from './ui/scroll-area';
 import { PropertyCard } from './property-card';
 import { AddPropertyForm } from './add-property-form';
@@ -33,6 +32,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const [selectedPropertyIds, setSelectedPropertyIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
+  const [selectedPropertyForCard, setSelectedPropertyForCard] = useState<Property | null>(null);
 
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
@@ -58,9 +58,11 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
 
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
+    setSelectedPropertyForCard(null); 
   };
   
   const togglePropertySelection = useCallback((propertyId: string) => {
+    setSelectedPropertyForCard(null); 
     setSelectedPropertyIds(prev =>
       prev.includes(propertyId)
         ? prev.filter(id => id !== propertyId)
@@ -103,13 +105,24 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
     setHoveredPropertyId(propertyId);
   }, []);
 
-  const handleMarkerClick = useCallback((propertyId: string) => {
-    togglePropertySelection(propertyId);
-  }, [togglePropertySelection]);
+  const handleMarkerClick = useCallback((property: Property) => {
+    if (viewMode === 'map') {
+      setSelectedPropertyIds([]);
+      setSelectedPropertyForCard(property);
+    } else {
+      togglePropertySelection(property.id);
+    }
+  }, [togglePropertySelection, viewMode]);
 
-  const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
-    // This can be used to clear selections, or for other interactions
+  const handleMapClick = useCallback(() => {
+    setSelectedPropertyForCard(null);
   }, []);
+  
+  const handleCompareClick = () => {
+    if (selectedPropertyIds.length > 0) {
+      router.push(`/compare?ids=${selectedPropertyIds.join(',')}`);
+    }
+  };
 
   const handleAddProperty = (newPropertyData: Omit<Property, 'id' | 'coordinates'>) => {
       const newProperty: Property = {
@@ -122,8 +135,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       };
       setProperties(prev => [...prev, newProperty]);
       setIsAddDrawerOpen(false);
-      // Optionally select the new property
-      // setSelectedPropertyIds([newProperty.id]);
   };
   
   return (
@@ -133,13 +144,16 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
         onFilterChange={handleFilterChange} 
         showFilters={true} 
         viewMode={viewMode}
-        onViewModeChange={setViewMode}
+        onViewModeChange={(mode) => {
+          setViewMode(mode);
+          setSelectedPropertyForCard(null);
+        }}
         onAddPropertyClick={() => setIsAddDrawerOpen(true)}
       />
       <main className="flex-grow pt-20 md:pt-24 flex flex-col">
         <div className="flex-grow relative">
-          {viewMode === 'list' && (
-             <ScrollArea className="h-full">
+          <div className={viewMode === 'list' ? 'block' : 'hidden'}>
+             <ScrollArea className="h-[calc(100vh-theme(spacing.24))]">
                 <div className="container mx-auto px-4 py-4">
                   {filteredProperties.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -164,9 +178,9 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
                   )}
                 </div>
               </ScrollArea>
-          )}
+          </div>
           
-          <div className="h-full w-full">
+          <div className={viewMode === 'map' ? 'block h-full w-full' : 'hidden'}>
             <PropertyMap
               properties={filteredProperties}
               apiKey={apiKey}
@@ -174,20 +188,29 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               onMapClick={handleMapClick}
               selectedPropertyIds={selectedPropertyIds}
               hoveredPropertyId={hoveredPropertyId}
-              className={viewMode === 'list' ? 'hidden' : ''}
             />
+             {selectedPropertyForCard && (
+               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-sm px-4">
+                <PropertyCard 
+                  property={selectedPropertyForCard} 
+                  isFloating 
+                  onClose={() => setSelectedPropertyForCard(null)} 
+                  onClick={() => handleCardClick(selectedPropertyForCard)}
+                />
+              </div>
+            )}
           </div>
 
         </div>
       </main>
 
-       {selectedPropertyIds.length > 0 && (
+       {selectedPropertyIds.length > 0 && viewMode === 'list' && (
           <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-20 w-full max-w-md">
             <div className="bg-background rounded-lg shadow-2xl p-4 m-4 flex items-center justify-between">
                 <p className="font-semibold">{selectedPropertyIds.length} properti dipilih</p>
                 <div className="flex gap-2">
                     <Button variant="ghost" onClick={() => setSelectedPropertyIds([])}>Bersihkan</Button>
-                    <Button>Bandingkan</Button>
+                    <Button onClick={handleCompareClick}>Bandingkan</Button>
                 </div>
             </div>
           </div>

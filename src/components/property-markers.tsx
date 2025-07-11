@@ -8,24 +8,24 @@ import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
 interface PropertyMarkersProps {
   properties: Property[];
-  onMarkerClick: (propertyId: string) => void;
+  onMarkerClick: (property: Property) => void;
   selectedPropertyIds: string[];
   hoveredPropertyId?: string | null;
 }
 
-const getIcon = (selected: boolean): google.maps.Icon | null => {
+const getIcon = (selected: boolean) => {
     if (typeof window === 'undefined' || !window.google) {
         return null; 
     }
 
     const icon: google.maps.Icon = {
         path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
-        fillColor: '#007BFF', // Blue dot
+        fillColor: '#007BFF',
         fillOpacity: 1,
         strokeColor: 'white',
         strokeWeight: 1.5,
-        scale: selected ? 2.2 : 1.5, // Make selected icon larger
-        anchor: new google.maps.Point(12, 24),
+        scale: selected ? 2.2 : 1.5,
+        anchor: new window.google.maps.Point(12, 24),
     };
 
     return icon;
@@ -51,7 +51,6 @@ export function PropertyMarkers({
     const currentMarkers = Object.keys(markers.current);
     const newPropertyIds = properties.map(p => p.id);
 
-    // Remove markers that are no longer in the properties list
     currentMarkers.forEach(markerId => {
       if (!newPropertyIds.includes(markerId)) {
         const marker = markers.current[markerId];
@@ -61,7 +60,6 @@ export function PropertyMarkers({
     });
 
     const markersToAdd = [];
-    // Add new markers or update existing ones
     for (const property of properties) {
       const isSelected = selectedPropertyIds.includes(property.id);
       const isHovered = property.id === hoveredPropertyId;
@@ -76,11 +74,10 @@ export function PropertyMarkers({
           title: property.title,
           icon: icon,
         });
-        marker.addListener('click', () => onMarkerClick(property.id));
+        marker.addListener('click', () => onMarkerClick(property));
         markers.current[property.id] = marker;
         markersToAdd.push(marker);
       } else {
-        // Update icon for selection/hover state
         markers.current[property.id].setIcon(icon);
         markers.current[property.id].setPosition(property.coordinates);
       }

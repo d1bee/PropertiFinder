@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 interface PropertyMapProps {
   properties: Property[];
   apiKey?: string;
-  onMarkerClick: (propertyId: string) => void;
+  onMarkerClick: (property: Property) => void;
   onMapClick: (e: google.maps.MapMouseEvent) => void;
   selectedPropertyIds: string[];
   hoveredPropertyId?: string | null;
