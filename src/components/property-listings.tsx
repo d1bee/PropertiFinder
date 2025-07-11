@@ -116,12 +116,33 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const handleMarkerClick = useCallback((property: Property, event: google.maps.MapMouseEvent) => {
     setSelectedPropertyIds([]);
     setSelectedPropertyForCard(property);
+
     if (event.domEvent instanceof MouseEvent) {
-      setCardPosition({ x: event.domEvent.clientX, y: event.domEvent.clientY });
+      const CARD_WIDTH = 384; // max-w-sm = 24rem = 384px
+      const CARD_HEIGHT = 208; // Roughly the height of the floating card
+      const PADDING = 16; // 1rem
+
+      const clickX = event.domEvent.clientX;
+      const clickY = event.domEvent.clientY;
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      let x = clickX + PADDING;
+      let y = clickY + PADDING;
+
+      if (x + CARD_WIDTH > windowWidth) {
+        x = windowWidth - CARD_WIDTH - PADDING;
+      }
+      if (y + CARD_HEIGHT > windowHeight) {
+        y = windowHeight - CARD_HEIGHT - PADDING;
+      }
+      
+      setCardPosition({ x: Math.max(PADDING, x), y: Math.max(PADDING, y) });
+
     } else {
       setCardPosition(null); 
     }
-  }, []);
+}, []);
 
   const handleMapClick = useCallback(() => {
     setSelectedPropertyForCard(null);
@@ -216,7 +237,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
                 <div 
                   ref={draggableRef} 
                   className="absolute z-10 w-full max-w-sm cursor-grab"
-                  style={cardPosition ? { top: cardPosition.y + 15, left: cardPosition.x + 15 } : { bottom: '1rem', left: '1rem' }}
+                  style={cardPosition ? { top: cardPosition.y, left: cardPosition.x } : { bottom: '1rem', left: '1rem' }}
                 >
                     <PropertyCard 
                     property={selectedPropertyForCard} 
