@@ -23,7 +23,7 @@ const formatPrice = (price: number) => {
 export function PropertyMap({ properties, apiKey, onMarkerClick }: PropertyMapProps) {
   const [infoWindow, setInfoWindow] = useState<{ property: Property } | null>(null);
 
-  const center = { lat: 40.7128, lng: -74.0060 }; // New York
+  const center = { lat: 1.0827, lng: 104.0304 }; // Batam, Indonesia
 
   const handleMarkerClick = (property: Property) => {
     setInfoWindow({ property });
