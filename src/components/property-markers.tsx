@@ -8,7 +8,7 @@ import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
 interface PropertyMarkersProps {
   properties: Property[];
-  onMarkerClick: (property: Property) => void;
+  onMarkerClick: (property: Property, event: google.maps.MapMouseEvent) => void;
   selectedPropertyIds: string[];
   hoveredPropertyId?: string | null;
 }
@@ -86,7 +86,7 @@ export function PropertyMarkers({
           title: property.title,
           icon: icon,
         });
-        marker.addListener('click', () => onMarkerClick(property));
+        marker.addListener('click', (event: google.maps.MapMouseEvent) => onMarkerClick(property, event));
         markers.current[property.id] = marker;
         markersToAdd.push(marker);
       } else {

@@ -35,6 +35,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [selectedPropertyForCard, setSelectedPropertyForCard] = useState<Property | null>(null);
   const [newPropertyCoords, setNewPropertyCoords] = useState<{lat: number; lng: number} | null>(null);
+  const [cardPosition, setCardPosition] = useState<{ x: number; y: number } | null>(null);
 
   const draggableRef = useRef<HTMLDivElement>(null);
 
@@ -112,9 +113,14 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
     setHoveredPropertyId(propertyId);
   }, []);
 
-  const handleMarkerClick = useCallback((property: Property) => {
+  const handleMarkerClick = useCallback((property: Property, event: google.maps.MapMouseEvent) => {
     setSelectedPropertyIds([]);
     setSelectedPropertyForCard(property);
+    if (event.domEvent instanceof MouseEvent) {
+      setCardPosition({ x: event.domEvent.clientX, y: event.domEvent.clientY });
+    } else {
+      setCardPosition(null); 
+    }
   }, []);
 
   const handleMapClick = useCallback(() => {
@@ -206,8 +212,12 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               hoveredPropertyId={hoveredPropertyId}
             />
              {selectedPropertyForCard && (
-               <Draggable nodeRef={draggableRef} handle=".drag-handle" bounds="parent">
-                <div ref={draggableRef} className="absolute bottom-4 left-4 z-10 w-full max-w-sm cursor-grab">
+               <Draggable nodeRef={draggableRef} handle=".drag-handle" bounds="parent" position={cardPosition ? { x: 0, y: 0 } : undefined}>
+                <div 
+                  ref={draggableRef} 
+                  className="absolute z-10 w-full max-w-sm cursor-grab"
+                  style={cardPosition ? { top: cardPosition.y + 15, left: cardPosition.x + 15 } : { bottom: '1rem', left: '1rem' }}
+                >
                     <PropertyCard 
                     property={selectedPropertyForCard} 
                     isFloating 
