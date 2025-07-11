@@ -4,7 +4,7 @@ export default function MapPage() {
     return (
         <div className="space-y-4 h-full flex flex-col p-4 md:p-6">
             <div className="text-center">
-                <h1 className="text-3xl font-bold">Property Map View</h1>
+                <h1 className="text-3xl font-bold text-primary">Property Map View</h1>
                 <p className="text-muted-foreground">Explore properties on an interactive map</p>
             </div>
             <div className="flex-grow h-[calc(100vh-250px)] rounded-lg overflow-hidden border">

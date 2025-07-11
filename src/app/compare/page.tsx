@@ -60,7 +60,7 @@ export default function ComparePage() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <BackButton />
-                    <h1 className="text-3xl font-bold tracking-tight">Perbandingan Properti</h1>
+                    <h1 className="text-3xl font-bold tracking-tight text-primary">Perbandingan Properti</h1>
                     <p className="text-muted-foreground">Bandingkan fitur-fitur properti pilihan Anda secara berdampingan.</p>
                 </div>
                 <Button onClick={handleExport} disabled={selectedProperties.length === 0}>

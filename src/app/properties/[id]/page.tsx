@@ -40,7 +40,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
     <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
        <div className="mb-4">
         <BackButton />
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{property.title}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">{property.title}</h1>
         <div className="flex items-center text-muted-foreground mt-1">
           <MapPin className="h-4 w-4 mr-1.5" />
           {property.location}
