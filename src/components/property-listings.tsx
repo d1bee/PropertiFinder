@@ -124,14 +124,12 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
     if (isSelectionMode) {
       togglePropertySelection(property.id);
     } else {
-      setSelectedPropertyIds([]); // Clear selections when showing a single card
+      setSelectedPropertyIds([]); 
       setSelectedPropertyForCard(property);
     }
   }, [isSelectionMode, togglePropertySelection]);
 
   const handleMapClick = useCallback(() => {
-    // Only close the floating card if we are NOT in selection mode.
-    // This prevents clearing selections when trying to interact with the map in selection mode.
     if (!isSelectionMode) {
         setSelectedPropertyForCard(null);
     }
@@ -169,9 +167,12 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   };
 
   const handleToggleSelectionMode = () => {
-    setIsSelectionMode(prev => !prev);
-    setSelectedPropertyForCard(null); 
-    if (isSelectionMode) {
+    const newSelectionMode = !isSelectionMode;
+    setIsSelectionMode(newSelectionMode);
+    if (newSelectionMode) {
+      setSelectedPropertyForCard(null); 
+    }
+    if (!newSelectionMode) {
       setSelectedPropertyIds([]);
     }
   };
@@ -231,7 +232,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               isSelectionMode={isSelectionMode}
               onToggleSelectionMode={handleToggleSelectionMode}
             />
-             {selectedPropertyForCard && (
+             {selectedPropertyForCard && !isSelectionMode && (
                <Draggable nodeRef={draggableRef} handle=".drag-handle" bounds="parent">
                 <div ref={draggableRef} className="absolute bottom-4 left-4 z-10 w-full max-w-sm cursor-grab">
                     <PropertyCard 
