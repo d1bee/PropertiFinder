@@ -1,7 +1,8 @@
+
 'use client';
 
 import Link from 'next/link';
-import { Heart, User, ChevronLeft, Circle, Map, List } from 'lucide-react';
+import { Heart, User, ChevronLeft, Circle, Map, List, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -25,9 +26,10 @@ interface HeaderProps {
     showFilters?: boolean;
     viewMode?: 'map' | 'list';
     onViewModeChange?: (mode: 'map' | 'list') => void;
+    onAddPropertyClick?: () => void;
 }
 
-export function Header({ filters, onFilterChange, showFilters = false, viewMode, onViewModeChange }: HeaderProps) {
+export function Header({ filters, onFilterChange, showFilters = false, viewMode, onViewModeChange, onAddPropertyClick }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const isPropertiesPage = pathname.startsWith('/properties');
@@ -111,6 +113,12 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
                     )}
                  </div>
                  <div className="flex items-center gap-2">
+                    {onAddPropertyClick && (
+                      <Button onClick={onAddPropertyClick} variant="outline" className="rounded-full bg-white/90 text-primary hover:bg-white">
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Tambah Properti
+                      </Button>
+                    )}
                     <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white">
                         <Heart className="h-5 w-5" />
                     </Button>

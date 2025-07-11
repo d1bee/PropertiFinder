@@ -26,7 +26,6 @@ const formSchema = z.object({
   landArea: z.coerce.number().min(0).optional().default(0),
   description: z.string().min(10, { message: 'Description must be at least 10 characters.' }),
   features: z.string().min(3, { message: 'Please list at least one feature.' }),
-  // For simplicity, we'll just ask for one image URL
   images: z.string().url({ message: 'Please enter a valid image URL.' }),
 });
 
@@ -134,5 +133,3 @@ export function AddPropertyForm({ onSubmit, onCancel }: AddPropertyFormProps) {
     </Card>
   );
 }
-
-    

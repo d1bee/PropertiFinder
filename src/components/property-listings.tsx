@@ -11,7 +11,7 @@ import { PropertyList } from './property-list';
 import { ScrollArea } from './ui/scroll-area';
 import { PropertyCard } from './property-card';
 import { AddPropertyForm } from './add-property-form';
-import { Drawer, DrawerContent } from './ui/drawer';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from './ui/drawer';
 
 interface PropertyListingsProps {
   apiKey?: string;
@@ -30,7 +30,7 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
   const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
-  const [newPropertyLocation, setNewPropertyLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
 
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
@@ -92,25 +92,28 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
 
   const handleMarkerClick = useCallback((propertyId: string) => {
     setSelectedPropertyId(propertyId);
-  }, []);
+     if (viewMode === 'list' && cardRefs.current[propertyId]) {
+      cardRefs.current[propertyId]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [viewMode]);
 
   const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
-    if (e.latLng) {
-      setNewPropertyLocation({ lat: e.latLng.lat(), lng: e.latLng.lng() });
-    }
+    setSelectedPropertyId(null);
   }, []);
 
   const handleAddProperty = (newPropertyData: Omit<Property, 'id' | 'coordinates'>) => {
-    if (newPropertyLocation) {
       const newProperty: Property = {
         id: (properties.length + 100).toString(),
         ...newPropertyData,
-        coordinates: newPropertyLocation,
+        // Assign a random coordinate in Batam for now
+        coordinates: {
+          lat: 1.118 + (Math.random() - 0.5) * 0.1,
+          lng: 104.048 + (Math.random() - 0.5) * 0.1,
+        },
       };
       setProperties(prev => [...prev, newProperty]);
-      setNewPropertyLocation(null);
+      setIsAddDrawerOpen(false);
       setSelectedPropertyId(newProperty.id);
-    }
   };
   
   return (
@@ -121,6 +124,7 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
         showFilters={true} 
         viewMode={viewMode}
         onViewModeChange={setViewMode}
+        onAddPropertyClick={() => setIsAddDrawerOpen(true)}
       />
       <div className="flex-grow pt-24">
         {viewMode === 'map' ? (
@@ -131,6 +135,8 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
                 apiKey={apiKey}
                 onMarkerClick={handleMarkerClick}
                 onMapClick={handleMapClick}
+                selectedPropertyId={selectedPropertyId}
+                hoveredPropertyId={hoveredPropertyId}
               />
             </div>
             {filteredProperties.length > 0 && (
@@ -172,9 +178,9 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
           </ScrollArea>
         )}
       </div>
-      <Drawer open={!!newPropertyLocation} onOpenChange={(isOpen) => !isOpen && setNewPropertyLocation(null)}>
+       <Drawer open={isAddDrawerOpen} onOpenChange={setIsAddDrawerOpen}>
         <DrawerContent>
-          {newPropertyLocation && <AddPropertyForm onSubmit={handleAddProperty} onCancel={() => setNewPropertyLocation(null)} />}
+           <AddPropertyForm onSubmit={handleAddProperty} onCancel={() => setIsAddDrawerOpen(false)} />
         </DrawerContent>
       </Drawer>
     </div>
