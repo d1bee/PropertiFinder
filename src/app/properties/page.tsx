@@ -46,7 +46,7 @@ export default function PropertiesPage() {
                     </div>
                 </div>
 
-                <div className="h-[calc(100vh-250px)] lg:h-auto sticky top-28">
+                <div className="h-[calc(100vh-250px)] lg:h-full sticky top-28">
                      {apiKey ? (
                         <PropertyMap properties={properties} apiKey={apiKey} onMarkerClick={handleMarkerClick} />
                     ) : (
