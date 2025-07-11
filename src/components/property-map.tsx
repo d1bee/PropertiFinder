@@ -1,3 +1,4 @@
+
 'use client';
 
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
@@ -11,6 +12,7 @@ interface PropertyMapProps {
   hoveredPropertyId?: string | null;
   onMarkerClick: (propertyId: string) => void;
   onMarkerHover: (propertyId: string | null) => void;
+  onMapClick: (e: google.maps.MapMouseEvent) => void;
 }
 
 export function PropertyMap({
@@ -20,6 +22,7 @@ export function PropertyMap({
   hoveredPropertyId,
   onMarkerClick,
   onMarkerHover,
+  onMapClick,
 }: PropertyMapProps) {
   const defaultCenter = { lat: 1.118, lng: 104.048 };
 
@@ -43,6 +46,7 @@ export function PropertyMap({
           gestureHandling={'greedy'}
           disableDefaultUI={true}
           mapId="e8c2865d3c829e0"
+          onClick={onMapClick}
         >
           <PropertyMarkers
             properties={properties}
@@ -56,3 +60,5 @@ export function PropertyMap({
     </div>
   );
 }
+
+    

@@ -1,18 +1,19 @@
+
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Property } from '@/lib/data';
+import { properties as initialProperties, type Property } from '@/lib/data';
 import { PropertyMap } from '@/components/property-map';
 import { Header } from './header';
 import type { FilterState } from './property-search-filter';
 import { PropertyList } from './property-list';
-import { cn } from '@/lib/utils';
 import { ScrollArea } from './ui/scroll-area';
 import { PropertyCard } from './property-card';
+import { AddPropertyForm } from './add-property-form';
+import { Drawer, DrawerContent } from './ui/drawer';
 
 interface PropertyListingsProps {
-  properties: Property[];
   apiKey?: string;
 }
 
@@ -23,11 +24,13 @@ const parseAreaRange = (range: string): [number, number] => {
   return [min, max];
 };
 
-export function PropertyListings({ properties, apiKey }: PropertyListingsProps) {
+export function PropertyListings({ apiKey }: PropertyListingsProps) {
   const router = useRouter();
+  const [properties, setProperties] = useState<Property[]>(initialProperties);
   const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
+  const [newPropertyLocation, setNewPropertyLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
@@ -36,6 +39,17 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
     buildingArea: 'Semua',
     landArea: 'Semua',
   });
+
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  useEffect(() => {
+    if (selectedPropertyId && cardRefs.current[selectedPropertyId]) {
+      cardRefs.current[selectedPropertyId]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    }
+  }, [selectedPropertyId]);
 
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
@@ -78,12 +92,30 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
 
   const handleMarkerClick = useCallback((propertyId: string) => {
     setSelectedPropertyId(propertyId);
-    router.push(`/properties/${propertyId}`);
-  }, [router]);
+  }, []);
 
   const handleMarkerHover = useCallback((propertyId: string | null) => {
     setHoveredPropertyId(propertyId);
   }, []);
+
+  const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
+    if (e.latLng) {
+      setNewPropertyLocation({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+    }
+  }, []);
+
+  const handleAddProperty = (newPropertyData: Omit<Property, 'id' | 'coordinates'>) => {
+    if (newPropertyLocation) {
+      const newProperty: Property = {
+        id: (properties.length + 100).toString(),
+        ...newPropertyData,
+        coordinates: newPropertyLocation,
+      };
+      setProperties(prev => [...prev, newProperty]);
+      setNewPropertyLocation(null);
+      setSelectedPropertyId(newProperty.id);
+    }
+  };
   
   return (
     <div className="relative w-full h-full flex flex-col">
@@ -105,6 +137,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
                 hoveredPropertyId={hoveredPropertyId}
                 onMarkerClick={handleMarkerClick}
                 onMarkerHover={handleMarkerHover}
+                onMapClick={handleMapClick}
               />
             </div>
             {filteredProperties.length > 0 && (
@@ -115,6 +148,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
                   onCardHover={handleCardHover}
                   selectedPropertyId={selectedPropertyId}
                   hoveredPropertyId={hoveredPropertyId}
+                  cardRefs={cardRefs}
                 />
               </div>
             )}
@@ -125,13 +159,15 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
               {filteredProperties.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                   {filteredProperties.map(property => (
-                    <PropertyCard
-                      key={property.id}
-                      property={property}
-                      onMouseEnter={() => {}}
-                      onMouseLeave={() => {}}
-                      onClick={() => handleCardClick(property)}
-                    />
+                     <div key={property.id} ref={el => (cardRefs.current[property.id] = el)}>
+                        <PropertyCard
+                        property={property}
+                        selected={property.id === selectedPropertyId || property.id === hoveredPropertyId}
+                        onMouseEnter={() => handleCardHover(property.id)}
+                        onMouseLeave={() => handleCardHover(null)}
+                        onClick={() => handleCardClick(property)}
+                        />
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -143,6 +179,13 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
           </ScrollArea>
         )}
       </div>
+      <Drawer open={!!newPropertyLocation} onOpenChange={(isOpen) => !isOpen && setNewPropertyLocation(null)}>
+        <DrawerContent>
+          {newPropertyLocation && <AddPropertyForm onSubmit={handleAddProperty} onCancel={() => setNewPropertyLocation(null)} />}
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }
+
+    

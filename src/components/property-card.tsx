@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { BedDouble, Bath, Heart, LandPlot, Building } from 'lucide-react';
@@ -37,15 +38,26 @@ const getAIHint = (type: Property['type']) => {
 }
 
 export function PropertyCard({ property, selected = false, onMouseEnter, onMouseLeave, onClick }: PropertyCardProps) {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Prevent the Link from navigating when the card itself is clicked
+    // as the parent component might handle the navigation logic.
+    const target = e.target as HTMLElement;
+    if (!target.closest('a')) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
+
   return (
     <div 
       className={cn(
-        "bg-card rounded-lg overflow-hidden border transition-all duration-200 cursor-pointer flex flex-col h-full", 
-        selected ? "shadow-lg border-primary" : "hover:shadow-md hover:border-muted-foreground/50"
+        "bg-card rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer flex flex-col h-full", 
+        selected ? "shadow-2xl border-primary ring-2 ring-primary" : "hover:shadow-md hover:border-muted-foreground/50"
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onClick={onClick}
+      onClick={handleClick}
     >
       <div className="relative">
           <Image
@@ -65,7 +77,7 @@ export function PropertyCard({ property, selected = false, onMouseEnter, onMouse
         <div className="flex justify-between items-start">
             <div>
                 <h3 className="font-semibold text-base leading-tight truncate" title={property.title}>
-                    <Link href={`/properties/${property.id}`} className="hover:underline">{property.title}</Link>
+                    <Link href={`/properties/${property.id}`} className="hover:underline" onClick={(e) => e.stopPropagation()}>{property.title}</Link>
                 </h3>
                 <p className="text-muted-foreground text-xs">{property.location}</p>
             </div>
@@ -103,3 +115,5 @@ export function PropertyCard({ property, selected = false, onMouseEnter, onMouse
     </div>
   );
 }
+
+    
