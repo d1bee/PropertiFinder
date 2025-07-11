@@ -1,14 +1,12 @@
-'use client';
-
 import Image from 'next/image';
-import Link from 'next/link';
-import { notFound, useRouter } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { properties, type Property } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
-import { BedDouble, Bath, Square, CheckCircle, MapPin, Phone, MessageSquare, ChevronLeft } from 'lucide-react';
+import { BedDouble, Bath, Square, CheckCircle, MapPin, Phone, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { BackButton } from '@/components/back-button';
 
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('id-ID', {
@@ -17,38 +15,33 @@ const formatPrice = (price: number) => {
     minimumFractionDigits: 0,
   }).format(price);
 };
+  
+const getAIHint = (type: Property['type']) => {
+  switch (type) {
+    case 'Rumah': return 'modern house interior';
+    case 'Apartemen': return 'apartment interior';
+    case 'Tanah': return 'land aerial';
+    default: return 'house interior';
+  }
+}
 
-const PropertyDetailPageClient = ({ params }: { params: { id: string } }) => {
-  const router = useRouter();
+export default function PropertyDetailPage({ params }: { params: { id: string } }) {
   const property = properties.find((p) => p.id === params.id);
 
   if (!property) {
     notFound();
   }
-  
-  const getAIHint = (type: Property['type']) => {
-    switch (type) {
-      case 'Rumah': return 'modern house interior';
-      case 'Apartemen': return 'apartment interior';
-      case 'Tanah': return 'land aerial';
-      default: return 'house interior';
-    }
-  }
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
        <div className="mb-4">
-        <Button variant="ghost" onClick={() => router.back()} className="mb-4">
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          Back to results
-        </Button>
+        <BackButton />
         <h1 className="text-3xl font-bold tracking-tight">{property.title}</h1>
         <div className="flex items-center text-muted-foreground mt-1">
           <MapPin className="h-4 w-4 mr-1.5" />
           {property.location}
         </div>
       </div>
-
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <main className="lg:col-span-2 space-y-8">
@@ -198,8 +191,4 @@ const PropertyDetailPageClient = ({ params }: { params: { id: string } }) => {
       </div>
     </div>
   );
-}
-
-export default function PropertyDetailPage({ params }: { params: { id: string } }) {
-  return <PropertyDetailPageClient params={params} />;
 }
