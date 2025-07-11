@@ -99,5 +99,3 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
     </header>
   );
 }
-
-    

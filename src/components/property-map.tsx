@@ -85,5 +85,3 @@ export function PropertyMap({ properties, apiKey, onMarkerClick, selectedPropert
     </div>
   );
 }
-
-    
