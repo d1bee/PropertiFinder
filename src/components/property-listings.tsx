@@ -62,6 +62,12 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   }, [selectedPropertyIds, viewMode]);
   
   useEffect(() => {
+    if (!isSelectionMode) {
+      setSelectedPropertyIds([]);
+    }
+  }, [isSelectionMode]);
+  
+  useEffect(() => {
     setIsSelectionMode(false);
     setSelectedPropertyIds([]);
   }, [viewMode]);
@@ -124,6 +130,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   }, [isSelectionMode, togglePropertySelection]);
 
   const handleMapClick = useCallback(() => {
+    // Only close the floating card if we are NOT in selection mode.
+    // This prevents clearing selections when trying to interact with the map in selection mode.
     if (!isSelectionMode) {
         setSelectedPropertyForCard(null);
     }
@@ -237,7 +245,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
                </Draggable>
             )}
           </div>
-
         </div>
       </main>
 
