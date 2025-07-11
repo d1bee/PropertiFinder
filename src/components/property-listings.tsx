@@ -71,7 +71,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   };
   
   const togglePropertySelection = useCallback((propertyId: string) => {
-    setSelectedPropertyForCard(null); 
     setSelectedPropertyIds(prev =>
       prev.includes(propertyId)
         ? prev.filter(id => id !== propertyId)
@@ -118,8 +117,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
     if (isSelectionMode) {
       togglePropertySelection(property.id);
     } else {
+      setSelectedPropertyIds([]); // Clear selections when showing a single card
       setSelectedPropertyForCard(property);
-      setSelectedPropertyIds([]);
     }
   }, [isSelectionMode, togglePropertySelection]);
 
