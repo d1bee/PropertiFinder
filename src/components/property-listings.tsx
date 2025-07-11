@@ -106,13 +106,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   }, []);
 
   const handleMarkerClick = useCallback((property: Property) => {
-    if (viewMode === 'map') {
-      setSelectedPropertyIds([]);
-      setSelectedPropertyForCard(property);
-    } else {
-      togglePropertySelection(property.id);
-    }
-  }, [togglePropertySelection, viewMode]);
+    togglePropertySelection(property.id);
+  }, [togglePropertySelection]);
 
   const handleMapClick = useCallback(() => {
     setSelectedPropertyForCard(null);
@@ -204,7 +199,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
         </div>
       </main>
 
-       {selectedPropertyIds.length > 0 && viewMode === 'list' && (
+       {selectedPropertyIds.length > 0 && (
           <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-20 w-full max-w-md">
             <div className="bg-background rounded-lg shadow-2xl p-4 m-4 flex items-center justify-between">
                 <p className="font-semibold">{selectedPropertyIds.length} properti dipilih</p>
