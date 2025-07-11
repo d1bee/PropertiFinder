@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import type { Property } from '@/lib/data';
@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from './ui/badge';
+import { Header } from './header';
+import type { FilterState } from './property-search-filter';
 
 interface PropertyListingsProps {
     properties: Property[];
@@ -24,9 +26,28 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
 
     const selectedId = searchParams.get('id');
 
-    const [selectedProperty, setSelectedProperty] = useState<Property | null>(
-        properties.find(p => p.id === selectedId) || null
-    );
+    const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+    const [filters, setFilters] = useState<FilterState>({
+        searchTerm: '',
+        propertyType: 'Semua',
+    });
+
+    const handleFilterChange = (newFilters: Partial<FilterState>) => {
+        setFilters(prev => ({ ...prev, ...newFilters }));
+    };
+    
+    const filteredProperties = useMemo(() => {
+        return properties.filter(property => {
+            const searchTermMatch = filters.searchTerm === '' || 
+                property.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+                property.description.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+                property.location.toLowerCase().includes(filters.searchTerm.toLowerCase());
+
+            const propertyTypeMatch = filters.propertyType === 'Semua' || property.type === filters.propertyType;
+
+            return searchTermMatch && propertyTypeMatch;
+        });
+    }, [properties, filters]);
 
     const handleMarkerClick = (property: Property) => {
         setSelectedProperty(property);
@@ -41,7 +62,6 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
-                // Check if the click was on the map marker itself to prevent immediate closing
                 const marker = (event.target as HTMLElement).closest('[role="button"]');
                 if (!marker) {
                     handleCardClose();
@@ -62,12 +82,21 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
         const property = properties.find(p => p.id === selectedId) || null;
         setSelectedProperty(property);
     }, [selectedId, properties]);
+    
+    useEffect(() => {
+        // Close popup if the selected property is filtered out
+        if (selectedProperty && !filteredProperties.find(p => p.id === selectedProperty.id)) {
+            handleCardClose();
+        }
+    }, [filteredProperties, selectedProperty, handleCardClose]);
+
 
     return (
         <div className="relative w-full h-full">
+            <Header filters={filters} onFilterChange={handleFilterChange} showFilters={true} />
             {apiKey ? (
                 <PropertyMap 
-                    properties={properties} 
+                    properties={filteredProperties} 
                     apiKey={apiKey} 
                     onMarkerClick={handleMarkerClick} 
                     selectedPropertyId={selectedProperty?.id}
@@ -82,8 +111,8 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
             )}
             
             {selectedProperty && (
-                <div ref={cardRef} className="absolute top-4 right-4 w-full max-w-sm space-y-3">
-                    <Card className="overflow-hidden">
+                <div ref={cardRef} className="absolute top-1/2 -translate-y-1/2 right-4 w-full max-w-sm space-y-3">
+                    <Card className="overflow-hidden shadow-2xl">
                         <CardHeader className="p-0">
                              <div className="relative">
                                 <Image
@@ -116,7 +145,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
                             <p className="text-sm line-clamp-3">{selectedProperty.description}</p>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="shadow-2xl">
                         <CardContent className="p-3 flex items-center justify-between">
                              <div className="flex items-center gap-3">
                                 <Avatar className="h-10 w-10">
@@ -124,7 +153,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
                                     <AvatarFallback>LR</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <p className="font-semibold">Lisa Richards</p>
+                                    <p className="font-semibold">Bapak Propertio</p>
                                     <p className="text-sm text-muted-foreground">Kontributor</p>
                                 </div>
                             </div>

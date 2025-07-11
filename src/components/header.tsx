@@ -6,9 +6,10 @@ import { Heart, User, ChevronLeft, Circle } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
-import { PropertySearchFilter } from './property-search-filter';
+import { PropertySearchFilter, type FilterState } from './property-search-filter';
 import { Badge } from './ui/badge';
 import { properties } from '@/lib/data';
+import Image from 'next/image';
 
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('id-ID', {
@@ -19,7 +20,13 @@ const formatPrice = (price: number) => {
   }).format(price);
 };
 
-export function Header() {
+interface HeaderProps {
+    filters?: FilterState;
+    onFilterChange?: (filters: Partial<FilterState>) => void;
+    showFilters?: boolean;
+}
+
+export function Header({ filters, onFilterChange, showFilters = false }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const isPropertiesPage = pathname.startsWith('/properties');
@@ -29,13 +36,16 @@ export function Header() {
   const property = propertyId ? properties.find(p => p.id === propertyId) : null;
 
   return (
-    <header className="bg-card border-b sticky top-0 z-50 shadow-sm">
+    <header className={cn(
+        "sticky top-0 z-50 shadow-sm",
+        isPropertiesPage ? "bg-transparent absolute w-full top-4" : "bg-card border-b"
+    )}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {!isPropertiesPage ? (
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center gap-8">
               <Link href="/" className="flex items-center gap-2">
-                <span className="text-3xl font-bold text-foreground">MAPDATA.</span>
+                 <Image src="/logo.png" alt="DATA BATAM Logo" width={140} height={40} />
               </Link>
             </div>
             <div className="flex items-center gap-2">
@@ -50,25 +60,40 @@ export function Header() {
             </div>
           </div>
         ) : (
-          <div className="h-20 flex flex-col justify-center">
-            {isDetailPage && property ? (
-              <div className="flex items-center gap-4">
-                <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={() => router.push('/properties')}>
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <span className="font-semibold truncate">{property.location}</span>
-                  <Circle className="h-2 w-2 fill-green-500 text-green-500" />
-                  <span className="text-sm text-green-600 font-medium">Aktif</span>
-                  <Badge variant="secondary" className="text-base font-bold">{formatPrice(property.price)}</Badge>
-                  <p className="text-sm text-muted-foreground hidden lg:block truncate">
-                    {property.type} {property.beds > 0 ? `| ${property.beds} KT` : ''} {property.baths > 0 ? `| ${property.baths} KM` : ''} | {property.area} m²
-                  </p>
+          <div className={cn("h-20 flex flex-col justify-center", isPropertiesPage && !isDetailPage && "bg-card rounded-xl shadow-lg border p-4 h-auto")}>
+             <div className="flex items-center justify-between">
+                <Link href="/" className="flex items-center gap-2">
+                    <Image src="/logo.png" alt="DATA BATAM Logo" width={140} height={40} />
+                </Link>
+                <div className="flex-grow">
+                    {isDetailPage && property ? (
+                    <div className="flex items-center gap-4">
+                        <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={() => router.push('/properties')}>
+                        <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                        <div className="flex items-center gap-3 overflow-hidden">
+                        <span className="font-semibold truncate">{property.location}</span>
+                        <Circle className="h-2 w-2 fill-green-500 text-green-500" />
+                        <span className="text-sm text-green-600 font-medium">Aktif</span>
+                        <Badge variant="secondary" className="text-base font-bold">{formatPrice(property.price)}</Badge>
+                        <p className="text-sm text-muted-foreground hidden lg:block truncate">
+                            {property.type} {property.beds > 0 ? `| ${property.beds} KT` : ''} {property.baths > 0 ? `| ${property.baths} KM` : ''} | {property.area} m²
+                        </p>
+                        </div>
+                    </div>
+                    ) : (
+                        showFilters && filters && onFilterChange && <PropertySearchFilter filters={filters} onFilterChange={onFilterChange} />
+                    )}
+                 </div>
+                 <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon">
+                        <Heart className="h-5 w-5" />
+                    </Button>
+                    <Button variant="ghost" size="icon">
+                        <User className="h-5 w-5" />
+                    </Button>
                 </div>
-              </div>
-            ) : (
-             <PropertySearchFilter />
-            )}
+            </div>
           </div>
         )}
       </div>

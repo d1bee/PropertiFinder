@@ -1,12 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { Header } from '@/components/header';
-import { Footer } from '@/components/footer';
 
 export const metadata: Metadata = {
-  title: 'Rentz - Find Your Perfect Rental',
-  description: 'Search for properties for rent in your area.',
+  title: 'Properti Finder - Temukan Properti Impian Anda di Batam',
+  description: 'Cari properti untuk dijual dan disewa di Batam, Indonesia.',
 };
 
 export default function RootLayout({
@@ -22,7 +20,6 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased bg-background text-foreground flex flex-col min-h-screen">
-        <Header />
         <main className="flex-grow">
           {children}
         </main>
