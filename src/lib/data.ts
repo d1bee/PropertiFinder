@@ -33,7 +33,7 @@ const GUDANG_IMAGES = [
   'https://images.unsplash.com/photo-1616433369402-49c4886616a9?q=80&w=1932&auto=format&fit=crop',
 ];
 const PABRIK_IMAGES = [
-  'https://images.unsplash.com/photo-1567954259363-471035a901d8?q=80&w=2070&auto=format&fit=crop', 
+  'https://img.freepik.com/foto-gratis/silo-pertanian-eksterior-bangunan_10180831.jpg',
   'https://images.unsplash.com/photo-1487875961445-47a003a6c167?q=80&w=2070&auto=format&fit=crop',
 ];
 const TANAH_KOSONG_IMAGES = [
@@ -802,3 +802,5 @@ export const properties: Property[] = [
     coordinates: { lat: 1.114, lng: 104.075 },
   },
 ];
+
+    
