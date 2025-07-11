@@ -67,19 +67,14 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
       return searchTermMatch && propertyTypeMatch && buildingAreaMatch && landAreaMatch;
     });
   }, [properties, filters]);
-
-  const handleMarkerClick = useCallback((property: Property) => {
-    setSelectedPropertyId(property.id);
-    router.push(`${pathname}?id=${property.id}`, { scroll: false });
-  }, [pathname, router]);
-
-  const handleMarkerHover = useCallback((propertyId: string | null) => {
-    setHoveredPropertyId(propertyId);
-  }, []);
-
+  
   const handleCardClick = useCallback((property: Property) => {
      router.push(`/properties/${property.id}`);
   }, [router]);
+
+  const handleCardHover = useCallback((propertyId: string | null) => {
+    setHoveredPropertyId(propertyId);
+  }, []);
   
   return (
     <div className="relative w-full h-full">
@@ -90,7 +85,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
             <PropertyList 
               properties={filteredProperties}
               onCardClick={handleCardClick}
-              onCardHover={handleMarkerHover}
+              onCardHover={handleCardHover}
               selectedPropertyId={selectedPropertyId}
               hoveredPropertyId={hoveredPropertyId}
             />
@@ -100,23 +95,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
             "h-full rounded-lg overflow-hidden",
             filteredProperties.length > 0 ? "col-span-8 lg:col-span-9" : "col-span-12"
           )}>
-            {apiKey ? (
-                <PropertyMap
-                properties={filteredProperties}
-                apiKey={apiKey}
-                onMarkerClick={handleMarkerClick}
-                onMarkerHover={handleMarkerHover}
-                selectedPropertyId={selectedPropertyId}
-                hoveredPropertyId={hoveredPropertyId}
-                />
-            ) : (
-                <div className="w-full h-full flex items-center justify-center bg-muted">
-                <p className="text-center text-destructive p-4">
-                    Google Maps API key is missing.
-                    Please add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to your environment variables.
-                </p>
-                </div>
-            )}
+            <PropertyMap />
         </div>
       </div>
     </div>
