@@ -63,6 +63,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   
   useEffect(() => {
     setSelectedPropertyIds([]);
+    setSelectedPropertyForCard(null);
   }, [viewMode]);
 
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
@@ -114,13 +115,12 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   }, []);
 
   const handleMarkerClick = useCallback((property: Property, event: google.maps.MapMouseEvent) => {
-    setSelectedPropertyIds([]);
     setSelectedPropertyForCard(property);
-
+    
     if (event.domEvent instanceof MouseEvent) {
-      const CARD_WIDTH = 384; // max-w-sm = 24rem = 384px
-      const CARD_HEIGHT = 208; // Roughly the height of the floating card
-      const PADDING = 16; // 1rem
+      const CARD_WIDTH = 384; 
+      const CARD_HEIGHT = 300; 
+      const PADDING = 16; 
 
       const clickX = event.domEvent.clientX;
       const clickY = event.domEvent.clientY;
@@ -130,19 +130,23 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       let x = clickX + PADDING;
       let y = clickY + PADDING;
 
-      if (x + CARD_WIDTH > windowWidth) {
+      if (x + CARD_WIDTH > windowWidth - PADDING) {
         x = windowWidth - CARD_WIDTH - PADDING;
       }
-      if (y + CARD_HEIGHT > windowHeight) {
+      if (y + CARD_HEIGHT > windowHeight - PADDING) {
         y = windowHeight - CARD_HEIGHT - PADDING;
       }
       
-      setCardPosition({ x: Math.max(PADDING, x), y: Math.max(PADDING, y) });
+      x = Math.max(PADDING, x);
+      y = Math.max(PADDING, y);
+
+      setCardPosition({ x, y });
 
     } else {
       setCardPosition(null); 
     }
-}, []);
+  }, []);
+
 
   const handleMapClick = useCallback(() => {
     setSelectedPropertyForCard(null);
@@ -229,7 +233,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               onMarkerClick={handleMarkerClick}
               onMapClick={handleMapClick}
               onMapRightClick={handleMapRightClick}
-              selectedPropertyIds={selectedPropertyIds}
               hoveredPropertyId={hoveredPropertyId}
             />
              {selectedPropertyForCard && (
@@ -253,7 +256,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
         </div>
       </main>
 
-       {selectedPropertyIds.length > 0 && (
+       {selectedPropertyIds.length > 0 && viewMode === 'list' && (
           <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-20 w-full max-w-md">
             <div className="bg-background rounded-lg shadow-2xl p-4 m-4 flex items-center justify-between">
                 <p className="font-semibold">{selectedPropertyIds.length} properti dipilih</p>
