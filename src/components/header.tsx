@@ -43,7 +43,7 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center gap-8">
               <Link href="/" className="flex items-center gap-2">
-                 <h1 className="text-xl font-bold">Properti Finder</h1>
+                 <h1 className="text-xl font-bold">Properti Batam dan Kepri</h1>
               </Link>
             </div>
             <div className="flex items-center gap-2">
@@ -61,7 +61,7 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
           <div className={cn("flex flex-col justify-center p-4 h-auto")}>
              <div className="flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-2">
-                    <h1 className="text-xl font-bold text-white">Properti Finder</h1>
+                    <h1 className="text-xl font-bold text-white">Properti Batam dan Kepri</h1>
                 </Link>
                 <div className="flex-grow">
                     {isDetailPage && property ? (

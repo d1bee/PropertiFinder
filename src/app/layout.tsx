@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Properti Finder - Temukan Properti Impian Anda di Batam',
-  description: 'Cari properti untuk dijual dan disewa di Batam, Indonesia.',
+  title: 'Properti Batam dan Kepri - Temukan Properti Impian Anda',
+  description: 'Cari properti untuk dijual dan disewa di Batam dan Kepulauan Riau, Indonesia.',
 };
 
 export default function RootLayout({
