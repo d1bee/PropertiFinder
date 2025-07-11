@@ -38,6 +38,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const [cardPosition, setCardPosition] = useState<{ x: number; y: number } | null>(null);
 
   const draggableRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
 
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
@@ -121,6 +122,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       const CARD_WIDTH = 384; 
       const CARD_HEIGHT = 300; 
       const PADDING = 16; 
+      const headerHeight = headerRef.current?.offsetHeight || 0;
 
       const clickX = event.domEvent.clientX;
       const clickY = event.domEvent.clientY;
@@ -129,16 +131,17 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
 
       let x = clickX + PADDING;
       let y = clickY + PADDING;
-
+      
       if (x + CARD_WIDTH > windowWidth - PADDING) {
         x = windowWidth - CARD_WIDTH - PADDING;
       }
+      
       if (y + CARD_HEIGHT > windowHeight - PADDING) {
         y = windowHeight - CARD_HEIGHT - PADDING;
       }
       
       x = Math.max(PADDING, x);
-      y = Math.max(PADDING, y);
+      y = Math.max(headerHeight + PADDING, y);
 
       setCardPosition({ x, y });
 
@@ -185,18 +188,20 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   
   return (
     <div className="relative w-full h-full flex flex-col">
-      <Header 
-        filters={filters} 
-        onFilterChange={handleFilterChange} 
-        showFilters={true} 
-        viewMode={viewMode}
-        onViewModeChange={(mode) => {
-          setViewMode(mode);
-          setSelectedPropertyForCard(null);
-        }}
-        onAddPropertyClick={() => handleAddDrawerOpen(true)}
-      />
-      <main className="flex-grow pt-[120px] flex flex-col">
+       <div ref={headerRef} className="w-full">
+         <Header 
+            filters={filters} 
+            onFilterChange={handleFilterChange} 
+            showFilters={true} 
+            viewMode={viewMode}
+            onViewModeChange={(mode) => {
+              setViewMode(mode);
+              setSelectedPropertyForCard(null);
+            }}
+            onAddPropertyClick={() => handleAddDrawerOpen(true)}
+          />
+       </div>
+      <main className="flex-grow flex flex-col">
         <div className="flex-grow relative">
           <div className={viewMode === 'list' ? 'block' : 'hidden'}>
              <ScrollArea className="h-[calc(100vh-theme(spacing.40)-40px)] sm:h-[calc(100vh-theme(spacing.40))]">
@@ -239,7 +244,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
                <Draggable nodeRef={draggableRef} handle=".drag-handle" bounds="parent" position={cardPosition ? { x: 0, y: 0 } : undefined}>
                 <div 
                   ref={draggableRef} 
-                  className="absolute z-10 w-full max-w-sm cursor-grab"
+                  className="fixed z-10 w-full max-w-sm cursor-grab"
                   style={cardPosition ? { top: cardPosition.y, left: cardPosition.x } : { bottom: '1rem', left: '1rem' }}
                 >
                     <PropertyCard 
