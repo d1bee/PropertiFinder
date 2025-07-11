@@ -1,16 +1,12 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { properties, type Property } from '@/lib/data';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { Badge } from '@/components/ui/badge';
-import { BedDouble, Bath, Square, CheckCircle, MapPin } from 'lucide-react';
+import { BedDouble, Bath, Square, CheckCircle, MapPin, Phone, MessageSquare, User } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
 
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('id-ID', {
@@ -37,82 +33,100 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <Card className="overflow-hidden">
-            <CardContent className="p-0">
-              <Carousel>
-                <CarouselContent>
-                  {property.images.map((img, index) => (
-                    <CarouselItem key={index}>
-                      <Image
-                        src={img}
-                        alt={`${property.title} image ${index + 1}`}
-                        width={800}
-                        height={600}
-                        className="object-cover w-full h-96"
-                        data-ai-hint={getAIHint(property.type)}
-                      />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2" />
-                <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2" />
-              </Carousel>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <Badge variant="secondary" className="w-fit mb-2">{property.type}</Badge>
-              <h1 className="text-3xl font-bold">{property.title}</h1>
-              <div className="flex items-center text-muted-foreground">
-                <MapPin className="h-4 w-4 mr-1" />
-                {property.location}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-4xl font-extrabold text-primary mb-4">{formatPrice(property.price)}</p>
-              <div className="flex items-center space-x-6 text-muted-foreground">
-                {property.type !== 'Tanah' && (
-                  <>
-                    <span className="flex items-center gap-1.5">
-                      <BedDouble className="h-5 w-5 text-primary" />
-                      <b>{property.beds}</b> KT
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Bath className="h-5 w-5 text-primary" />
-                      <b>{property.baths}</b> KM
-                    </span>
-                  </>
-                )}
-                <span className="flex items-center gap-1.5">
-                  <Square className="h-5 w-5 text-primary" />
-                  <b>{property.area}</b> m²
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+    <div className="max-w-7xl mx-auto">
+      <div className="mb-4">
+        <h1 className="text-3xl font-bold tracking-tight">{property.title}</h1>
+        <div className="flex items-center text-muted-foreground mt-1">
+          <MapPin className="h-4 w-4 mr-1.5" />
+          {property.location}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-        <div className="lg:col-span-2 space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <main className="lg:col-span-2 space-y-8">
+          <div className="grid grid-cols-2 grid-rows-2 gap-2 h-[500px]">
+            <div className="col-span-2 row-span-2">
+              <Image
+                src={property.images[0]}
+                alt={`${property.title} main image`}
+                width={800}
+                height={600}
+                className="object-cover w-full h-full rounded-lg"
+                data-ai-hint={getAIHint(property.type)}
+                priority
+              />
+            </div>
+            {property.images.slice(1, 3).map((img, index) => (
+              <div key={index} className="hidden md:block">
+                <Image
+                  src={img}
+                  alt={`${property.title} image ${index + 2}`}
+                  width={400}
+                  height={300}
+                  className="object-cover w-full h-full rounded-lg"
+                  data-ai-hint={getAIHint(property.type)}
+                />
+              </div>
+            ))}
+          </div>
+
           <Card>
-            <CardHeader><CardTitle>Deskripsi</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Deskripsi Properti</CardTitle>
+            </CardHeader>
             <CardContent>
               <p className="text-foreground/80 leading-relaxed">{property.description}</p>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader><CardTitle>Detail Properti</CardTitle></CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-accent rounded-lg">
+                        <BedDouble className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                        <p className="text-muted-foreground">Kamar Tidur</p>
+                        <p className="font-semibold">{property.type !== 'Tanah' ? `${property.beds} KT` : 'N/A'}</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-accent rounded-lg">
+                        <Bath className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                        <p className="text-muted-foreground">Kamar Mandi</p>
+                        <p className="font-semibold">{property.type !== 'Tanah' ? `${property.baths} KM` : 'N/A'}</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-accent rounded-lg">
+                        <Square className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                        <p className="text-muted-foreground">Luas Area</p>
+                        <p className="font-semibold">{property.area} m²</p>
+                    </div>
+                </div>
+                 <div className="flex items-center gap-4">
+                    <div className="p-3 bg-accent rounded-lg">
+                        <Badge variant="secondary" className="text-base">{property.type}</Badge>
+                    </div>
+                    <div>
+                        <p className="text-muted-foreground">Tipe Properti</p>
+                        <p className="font-semibold">{property.type}</p>
+                    </div>
+                </div>
+            </CardContent>
+          </Card>
+          
           <Card>
             <CardHeader><CardTitle>Fitur Utama</CardTitle></CardHeader>
             <CardContent>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {property.features.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-2">
+                  <li key={index} className="flex items-center gap-3">
                     <CheckCircle className="h-5 w-5 text-primary" />
                     <span>{feature}</span>
                   </li>
@@ -120,7 +134,59 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
               </ul>
             </CardContent>
           </Card>
-        </div>
+        </main>
+        
+        <aside className="lg:col-span-1">
+          <div className="sticky top-24 space-y-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Harga Properti</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-4xl font-extrabold text-primary mb-4">{formatPrice(property.price)}</p>
+                <Button className="w-full">Jadwalkan Kunjungan</Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center gap-4">
+                 <Avatar className="h-16 w-16">
+                    <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="agent portrait" />
+                    <AvatarFallback>AP</AvatarFallback>
+                </Avatar>
+                <div>
+                    <CardTitle className="text-xl">Agen Properti</CardTitle>
+                    <p className="text-muted-foreground">Bapak Propertio</p>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button variant="outline" className="w-full">
+                    <Phone className="mr-2"/> Hubungi Agen
+                </Button>
+                 <Button variant="outline" className="w-full">
+                    <MessageSquare className="mr-2"/> Kirim Pesan
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Lokasi di Peta</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-64 rounded-lg overflow-hidden">
+                    <Image src={`https://maps.googleapis.com/maps/api/staticmap?center=${property.coordinates.lat},${property.coordinates.lng}&zoom=15&size=600x400&markers=color:red%7C${property.coordinates.lat},${property.coordinates.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}`}
+                        alt={`Map of ${property.title}`}
+                        width={600}
+                        height={400}
+                        className="w-full h-full object-cover"
+                        data-ai-hint="map location"
+                    />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </aside>
       </div>
     </div>
   );
