@@ -8,20 +8,14 @@ import type { Property } from '@/lib/data';
 interface PropertyMapProps {
   properties: Property[];
   apiKey?: string;
-  selectedPropertyId?: string | null;
-  hoveredPropertyId?: string | null;
   onMarkerClick: (propertyId: string) => void;
-  onMarkerHover: (propertyId: string | null) => void;
   onMapClick: (e: google.maps.MapMouseEvent) => void;
 }
 
 export function PropertyMap({
   properties,
   apiKey,
-  selectedPropertyId,
-  hoveredPropertyId,
   onMarkerClick,
-  onMarkerHover,
   onMapClick,
 }: PropertyMapProps) {
   const defaultCenter = { lat: 1.118, lng: 104.048 };
@@ -50,15 +44,10 @@ export function PropertyMap({
         >
           <PropertyMarkers
             properties={properties}
-            selectedPropertyId={selectedPropertyId}
-            hoveredPropertyId={hoveredPropertyId}
             onMarkerClick={onMarkerClick}
-            onMarkerHover={onMarkerHover}
           />
         </Map>
       </APIProvider>
     </div>
   );
 }
-
-    

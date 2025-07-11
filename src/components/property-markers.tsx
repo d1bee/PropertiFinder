@@ -1,67 +1,73 @@
 
 'use client';
 
-import { AdvancedMarker } from '@vis.gl/react-google-maps';
+import { useEffect, useRef } from 'react';
+import { useMap } from '@vis.gl/react-google-maps';
 import type { Property } from '@/lib/data';
-import { cn } from '@/lib/utils';
-import { Home, Building } from 'lucide-react';
+import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
 interface PropertyMarkersProps {
   properties: Property[];
-  selectedPropertyId?: string | null;
-  hoveredPropertyId?: string | null;
   onMarkerClick: (propertyId: string) => void;
-  onMarkerHover: (propertyId: string | null) => void;
 }
 
 export function PropertyMarkers({
   properties,
-  selectedPropertyId,
-  hoveredPropertyId,
   onMarkerClick,
-  onMarkerHover,
 }: PropertyMarkersProps) {
-  
-  const handleMarkerClick = (propertyId: string) => {
-    onMarkerClick(propertyId);
-  };
+  const map = useMap();
+  const markers = useRef<Record<string, google.maps.Marker>>({});
+  const clusterer = useRef<MarkerClusterer | null>(null);
 
-  const getIcon = (type: Property['type']) => {
-    switch (type) {
-      case 'Rumah':
-      case 'Apartemen':
-      case 'Ruko':
-        return <Home className="h-4 w-4 text-white" />;
-      default:
-        return <Building className="h-4 w-4 text-white" />;
+  useEffect(() => {
+    if (!map) return;
+
+    if (!clusterer.current) {
+      clusterer.current = new MarkerClusterer({ map });
     }
-  };
 
-  return (
-    <>
-      {properties.map((property) => (
-        <AdvancedMarker
-          key={property.id}
-          position={property.coordinates}
-          onClick={() => handleMarkerClick(property.id)}
-          onPointerEnter={() => onMarkerHover(property.id)}
-          onPointerLeave={() => onMarkerHover(null)}
-          title={property.title}
-        >
-          <div
-            className={cn(
-              'w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer',
-              (property.id === selectedPropertyId || property.id === hoveredPropertyId)
-                ? 'bg-primary scale-110'
-                : 'bg-primary/70'
-            )}
-          >
-            {getIcon(property.type)}
-          </div>
-        </AdvancedMarker>
-      ))}
-    </>
-  );
-}
+    const currentMarkers = Object.keys(markers.current);
+    const newPropertyIds = properties.map(p => p.id);
 
+    // Remove markers that are no longer in the properties list
+    currentMarkers.forEach(markerId => {
+      if (!newPropertyIds.includes(markerId)) {
+        const marker = markers.current[markerId];
+        clusterer.current?.removeMarker(marker, true);
+        delete markers.current[markerId];
+      }
+    });
+
+    const markersToAdd = [];
+    // Add new markers or update existing ones
+    for (const property of properties) {
+      if (!markers.current[property.id]) {
+        const marker = new google.maps.Marker({
+          position: property.coordinates,
+          title: property.title,
+        });
+        marker.addListener('click', () => onMarkerClick(property.id));
+        markers.current[property.id] = marker;
+        markersToAdd.push(marker);
+      } else {
+        // Potentially update marker position if coordinates can change
+        markers.current[property.id].setPosition(property.coordinates);
+      }
+    }
+
+    if (markersToAdd.length > 0) {
+      clusterer.current.addMarkers(markersToAdd, true);
+    }
     
+    clusterer.current.render();
+    
+    return () => {
+      // Cleanup on component unmount is tricky with clusterer
+      // as it might be used by a new instance of the component.
+      // A more robust solution might involve a global manager for the map instance.
+    };
+  }, [map, properties, onMarkerClick]);
+
+
+  return null; // The markers are managed directly on the map instance
+}

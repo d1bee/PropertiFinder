@@ -94,10 +94,6 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
     setSelectedPropertyId(propertyId);
   }, []);
 
-  const handleMarkerHover = useCallback((propertyId: string | null) => {
-    setHoveredPropertyId(propertyId);
-  }, []);
-
   const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     if (e.latLng) {
       setNewPropertyLocation({ lat: e.latLng.lat(), lng: e.latLng.lng() });
@@ -133,10 +129,7 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
               <PropertyMap
                 properties={filteredProperties}
                 apiKey={apiKey}
-                selectedPropertyId={selectedPropertyId}
-                hoveredPropertyId={hoveredPropertyId}
                 onMarkerClick={handleMarkerClick}
-                onMarkerHover={handleMarkerHover}
                 onMapClick={handleMapClick}
               />
             </div>
@@ -187,5 +180,3 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
     </div>
   );
 }
-
-    
