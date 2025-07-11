@@ -42,7 +42,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
         const handleClickOutside = (event: MouseEvent) => {
             if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
                 // Check if the click was on the map marker itself to prevent immediate closing
-                const marker = (event.target as HTMLElement).closest('[aria-label^="Map marker"]');
+                const marker = (event.target as HTMLElement).closest('[role="button"]');
                 if (!marker) {
                     handleCardClose();
                 }
@@ -56,7 +56,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [selectedProperty]);
+    }, [selectedProperty, handleCardClose]);
     
     useEffect(() => {
         const property = properties.find(p => p.id === selectedId) || null;
@@ -94,7 +94,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
                                     className="object-cover w-full h-48"
                                     data-ai-hint="modern house"
                                 />
-                                <Badge className="absolute top-2 left-2 bg-green-500/80 text-white border-none">Available</Badge>
+                                <Badge className="absolute top-2 left-2 bg-green-500/80 text-white border-none">Tersedia</Badge>
                              </div>
                              <div className="flex p-2 gap-2">
                                 {selectedProperty.images.slice(0, 3).map((img, index) => (
@@ -112,7 +112,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
                         </CardHeader>
                         <CardContent className="p-4 space-y-2">
                             <h3 className="text-xl font-bold">{selectedProperty.title}</h3>
-                             <p className="text-sm text-muted-foreground">{selectedProperty.type} | {selectedProperty.beds} Beds | {selectedProperty.baths} Baths | {selectedProperty.area} m²</p>
+                             <p className="text-sm text-muted-foreground">{selectedProperty.type} | {selectedProperty.beds > 0 ? `${selectedProperty.beds} KT |` : ''} {selectedProperty.baths > 0 ? `${selectedProperty.baths} KM |` : ''} {selectedProperty.area} m²</p>
                             <p className="text-sm line-clamp-3">{selectedProperty.description}</p>
                         </CardContent>
                     </Card>
@@ -125,10 +125,10 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
                                 </Avatar>
                                 <div>
                                     <p className="font-semibold">Lisa Richards</p>
-                                    <p className="text-sm text-muted-foreground">Agent</p>
+                                    <p className="text-sm text-muted-foreground">Kontributor</p>
                                 </div>
                             </div>
-                            <Button onClick={() => router.push(`/properties/${selectedProperty.id}`)}>View Details</Button>
+                            <Button onClick={() => router.push(`/properties/${selectedProperty.id}`)}>Lihat Detail</Button>
                         </CardContent>
                     </Card>
                 </div>

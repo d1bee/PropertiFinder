@@ -2,7 +2,7 @@
 export type Property = {
   id: string;
   title: string;
-  type: 'Rumah' | 'Apartemen' | 'Tanah';
+  type: 'Rumah' | 'Apartemen' | 'Tanah Kosong' | 'Gudang' | 'Ruko' | 'Galangan Kapal' | 'Pabrik';
   location: string;
   price: number;
   beds: number;
@@ -49,7 +49,7 @@ export const properties: Property[] = [
   {
     id: '9',
     title: 'Tanah Kavling di Nongsa',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Nongsa, Batam',
     price: 5000000000,
     beds: 0,
@@ -77,10 +77,10 @@ export const properties: Property[] = [
   {
     id: '11',
     title: 'Ruko 3 Lantai di Baloi',
-    type: 'Rumah',
+    type: 'Ruko',
     location: 'Baloi, Batam',
     price: 3200000000,
-    beds: 5,
+    beds: 0,
     baths: 3,
     area: 250,
     images: ['https://placehold.co/800x600.png'],
@@ -104,22 +104,22 @@ export const properties: Property[] = [
   },
   {
     id: '13',
-    title: 'Rumah di Tiban',
-    type: 'Rumah',
+    title: 'Gudang di Tiban',
+    type: 'Gudang',
     location: 'Tiban, Batam',
     price: 850000000,
-    beds: 2,
+    beds: 0,
     baths: 1,
-    area: 90,
+    area: 900,
     images: ['https://placehold.co/800x600.png'],
-    description: 'Rumah terawat di kawasan pemukiman yang tenang dan berkembang di Tiban.',
-    features: ['Harga Terjangkau', 'Lingkungan Tenang', 'Dekat Pasar', 'Renovasi Minor'],
+    description: 'Gudang terawat di kawasan pemukiman yang tenang dan berkembang di Tiban.',
+    features: ['Harga Terjangkau', 'Lingkungan Tenang', 'Dekat Pasar', 'Akses Kontainer'],
     coordinates: { lat: 1.11, lng: 103.98 },
   },
   {
     id: '14',
-    title: 'Tanah Industri di Batu Ampar',
-    type: 'Tanah',
+    title: 'Pabrik di Batu Ampar',
+    type: 'Pabrik',
     location: 'Batu Ampar, Batam',
     price: 25000000000,
     beds: 0,
@@ -132,16 +132,16 @@ export const properties: Property[] = [
   },
   {
     id: '15',
-    title: 'Rumah Cluster di Marina City',
-    type: 'Rumah',
+    title: 'Galangan Kapal di Marina City',
+    type: 'Galangan Kapal',
     location: 'Marina City, Batam',
-    price: 1200000000,
-    beds: 3,
-    baths: 2,
-    area: 110,
+    price: 12000000000,
+    beds: 0,
+    baths: 0,
+    area: 11000,
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/400x300.png'],
-    description: 'Rumah dalam cluster baru di Marina City, dekat dengan tempat wisata dan terminal feri Waterfront.',
-    features: ['Dekat Tempat Wisata', 'Cluster Baru', 'Fasum Lengkap', 'Dekat Feri ke Singapura'],
+    description: 'Galangan kapal di Marina City, dekat dengan tempat wisata dan terminal feri Waterfront.',
+    features: ['Dekat Tempat Wisata', 'Akses Laut', 'Fasum Lengkap', 'Dekat Feri ke Singapura'],
     coordinates: { lat: 1.10, lng: 103.93 },
   },
   {
@@ -175,7 +175,7 @@ export const properties: Property[] = [
   {
     id: '18',
     title: 'Kavling Siap Bangun di Palm Springs',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Palm Springs, Batam',
     price: 3000000000,
     beds: 0,
@@ -231,7 +231,7 @@ export const properties: Property[] = [
   {
     id: '22',
     title: 'Tanah Kebun di Tembesi',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Tembesi, Batam',
     price: 800000000,
     beds: 0,
@@ -287,7 +287,7 @@ export const properties: Property[] = [
   {
     id: '26',
     title: 'Tanah Komersial di Simpang Kabil',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Simpang Kabil, Batam',
     price: 15000000000,
     beds: 0,
@@ -343,7 +343,7 @@ export const properties: Property[] = [
   {
     id: '30',
     title: 'Tanah Pinggir Jalan di Sei Panas',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Sei Panas, Batam',
     price: 4000000000,
     beds: 0,
@@ -385,7 +385,7 @@ export const properties: Property[] = [
   {
     id: '33',
     title: 'Tanah di Pulau Galang',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Pulau Galang, Batam',
     price: 2000000000,
     beds: 0,
@@ -441,7 +441,7 @@ export const properties: Property[] = [
   {
     id: '37',
     title: 'Tanah Kavling di Perumahan KDA',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Batam Center, Batam',
     price: 900000000,
     beds: 0,
@@ -511,7 +511,7 @@ export const properties: Property[] = [
   {
     id: '42',
     title: 'Tanah Industri di Kabil',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Kabil, Batam',
     price: 30000000000,
     beds: 0,
@@ -553,7 +553,7 @@ export const properties: Property[] = [
   {
     id: '45',
     title: 'Tanah Matang di Bengkong',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Bengkong, Batam',
     price: 2000000000,
     beds: 0,
@@ -595,7 +595,7 @@ export const properties: Property[] = [
   {
     id: '48',
     title: 'Tanah Pinggir Pantai di Batu Besar',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Batu Besar, Batam',
     price: 7000000000,
     beds: 0,
@@ -623,10 +623,10 @@ export const properties: Property[] = [
   {
     id: '50',
     title: 'Ruko di Komplek Windsor',
-    type: 'Rumah',
+    type: 'Ruko',
     location: 'Nagoya, Batam',
     price: 2800000000,
-    beds: 4,
+    beds: 0,
     baths: 3,
     area: 200,
     images: ['https://placehold.co/800x600.png'],
@@ -665,7 +665,7 @@ export const properties: Property[] = [
   {
     id: '53',
     title: 'Tanah Kavling di Duriangkang',
-    type: 'Tanah',
+    type: 'Tanah Kosong',
     location: 'Duriangkang, Batam',
     price: 500000000,
     beds: 0,

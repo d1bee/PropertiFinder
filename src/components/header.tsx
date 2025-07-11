@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -9,6 +10,14 @@ import { PropertySearchFilter } from './property-search-filter';
 import { Badge } from './ui/badge';
 import { properties } from '@/lib/data';
 
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+};
 
 export function Header() {
   const pathname = usePathname();
@@ -30,8 +39,8 @@ export function Header() {
               </Link>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="ghost" className="hidden sm:inline-flex bg-green-100 text-green-700 hover:bg-green-200">Pay Rent</Button>
-              <Button className="hidden sm:inline-flex bg-primary text-primary-foreground">Post Property <span className="ml-2 bg-blue-400 text-white text-xs px-2 py-0.5 rounded-full">FREE</span></Button>
+              <Button variant="ghost" className="hidden sm:inline-flex bg-green-100 text-green-700 hover:bg-green-200">Bayar Sewa</Button>
+              <Button className="hidden sm:inline-flex bg-primary text-primary-foreground">Post Properti <span className="ml-2 bg-blue-400 text-white text-xs px-2 py-0.5 rounded-full">GRATIS</span></Button>
               <Button variant="ghost" size="icon">
                 <Heart className="h-5 w-5" />
               </Button>
@@ -50,10 +59,10 @@ export function Header() {
                 <div className="flex items-center gap-3 overflow-hidden">
                   <span className="font-semibold truncate">{property.location}</span>
                   <Circle className="h-2 w-2 fill-green-500 text-green-500" />
-                  <span className="text-sm text-green-600 font-medium">Active</span>
-                  <Badge variant="secondary" className="text-base font-bold">${(property.price / 16000).toLocaleString()}</Badge>
+                  <span className="text-sm text-green-600 font-medium">Aktif</span>
+                  <Badge variant="secondary" className="text-base font-bold">{formatPrice(property.price)}</Badge>
                   <p className="text-sm text-muted-foreground hidden lg:block truncate">
-                    {property.type} | {property.beds} Beds | {property.baths} Baths | {property.area} m²
+                    {property.type} {property.beds > 0 ? `| ${property.beds} KT` : ''} {property.baths > 0 ? `| ${property.baths} KM` : ''} | {property.area} m²
                   </p>
                 </div>
               </div>

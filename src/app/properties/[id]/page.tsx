@@ -20,7 +20,11 @@ const getAIHint = (type: Property['type']) => {
   switch (type) {
     case 'Rumah': return 'modern house interior';
     case 'Apartemen': return 'apartment interior';
-    case 'Tanah': return 'land aerial';
+    case 'Tanah Kosong': return 'land aerial';
+    case 'Gudang': return 'warehouse interior';
+    case 'Ruko': return 'storefront building';
+    case 'Galangan Kapal': return 'shipyard aerial';
+    case 'Pabrik': return 'factory building';
     default: return 'house interior';
   }
 }
@@ -89,7 +93,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                     </div>
                     <div>
                         <p className="text-muted-foreground">Kamar Tidur</p>
-                        <p className="font-semibold">{property.type !== 'Tanah' ? `${property.beds} KT` : 'N/A'}</p>
+                        <p className="font-semibold">{property.beds > 0 ? `${property.beds} KT` : 'N/A'}</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -98,7 +102,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                     </div>
                     <div>
                         <p className="text-muted-foreground">Kamar Mandi</p>
-                        <p className="font-semibold">{property.type !== 'Tanah' ? `${property.baths} KM` : 'N/A'}</p>
+                        <p className="font-semibold">{property.baths > 0 ? `${property.baths} KM` : 'N/A'}</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -153,16 +157,16 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
               <CardHeader className="flex flex-row items-center gap-4">
                  <Avatar className="h-16 w-16">
                     <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="agent portrait" />
-                    <AvatarFallback>AP</AvatarFallback>
+                    <AvatarFallback>KP</AvatarFallback>
                 </Avatar>
                 <div>
-                    <CardTitle className="text-xl">Agen Properti</CardTitle>
+                    <CardTitle className="text-xl">Kontributor</CardTitle>
                     <p className="text-muted-foreground">Bapak Propertio</p>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button variant="outline" className="w-full">
-                    <Phone className="mr-2"/> Hubungi Agen
+                    <Phone className="mr-2"/> Hubungi Kontributor
                 </Button>
                  <Button variant="outline" className="w-full">
                     <MessageSquare className="mr-2"/> Kirim Pesan
