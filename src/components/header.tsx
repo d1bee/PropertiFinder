@@ -1,13 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { Heart, User, ChevronLeft, Circle } from 'lucide-react';
+import { Heart, User, ChevronLeft, Circle, Map, List } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { PropertySearchFilter, type FilterState } from './property-search-filter';
 import { Badge } from './ui/badge';
 import { properties } from '@/lib/data';
+import Image from 'next/image';
 
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('id-ID', {
@@ -22,9 +23,11 @@ interface HeaderProps {
     filters?: FilterState;
     onFilterChange?: (filters: Partial<FilterState>) => void;
     showFilters?: boolean;
+    viewMode?: 'map' | 'list';
+    onViewModeChange?: (mode: 'map' | 'list') => void;
 }
 
-export function Header({ filters, onFilterChange, showFilters = false }: HeaderProps) {
+export function Header({ filters, onFilterChange, showFilters = false, viewMode, onViewModeChange }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const isPropertiesPage = pathname.startsWith('/properties');
@@ -60,21 +63,45 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
         ) : (
           <div className={cn("flex flex-col justify-center p-4 h-auto")}>
              <div className="flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-2">
-                    <h1 className="text-xl font-bold text-white">Properti Batam dan Kepri</h1>
-                </Link>
+                <div className="flex items-center gap-4">
+                  <Link href="/" className="flex items-center gap-2">
+                      <h1 className="text-xl font-bold text-white">Properti Batam dan Kepri</h1>
+                  </Link>
+                  {onViewModeChange && (
+                    <div className="flex items-center gap-2 bg-black/20 p-1 rounded-full">
+                      <Button 
+                        size="sm"
+                        variant={viewMode === 'map' ? 'secondary': 'ghost'}
+                        onClick={() => onViewModeChange('map')}
+                        className={cn("rounded-full h-8 text-white", viewMode === 'map' ? 'text-primary-foreground' : 'hover:bg-white/20 hover:text-white')}
+                      >
+                        <Map className="h-4 w-4 mr-2"/>
+                        Peta
+                      </Button>
+                      <Button 
+                        size="sm"
+                        variant={viewMode === 'list' ? 'secondary': 'ghost'}
+                        onClick={() => onViewModeChange('list')}
+                        className={cn("rounded-full h-8 text-white", viewMode === 'list' ? 'text-primary-foreground' : 'hover:bg-white/20 hover:text-white')}
+                      >
+                         <List className="h-4 w-4 mr-2"/>
+                        Daftar
+                      </Button>
+                    </div>
+                  )}
+                </div>
                 <div className="flex-grow">
                     {isDetailPage && property ? (
                     <div className="flex items-center gap-4">
                         <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={() => router.push('/properties')}>
                         <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        <div className="flex items-center gap-3 overflow-hidden">
+                        <div className="flex items-center gap-3 overflow-hidden text-white">
                         <span className="font-semibold truncate">{property.location}</span>
                         <Circle className="h-2 w-2 fill-green-500 text-green-500" />
-                        <span className="text-sm text-green-600 font-medium">Aktif</span>
+                        <span className="text-sm text-green-400 font-medium">Aktif</span>
                         <Badge variant="secondary" className="text-base font-bold">{formatPrice(property.price)}</Badge>
-                        <p className="text-sm text-muted-foreground hidden lg:block truncate">
+                        <p className="text-sm text-gray-300 hidden lg:block truncate">
                             {property.type} {property.beds > 0 ? `| ${property.beds} KT` : ''} {property.baths > 0 ? `| ${property.baths} KM` : ''} | LB: {property.buildingArea} m²
                         </p>
                         </div>

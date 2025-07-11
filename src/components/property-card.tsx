@@ -40,7 +40,7 @@ export function PropertyCard({ property, selected = false, onMouseEnter, onMouse
   return (
     <div 
       className={cn(
-        "bg-card rounded-lg overflow-hidden border transition-all duration-200 cursor-pointer", 
+        "bg-card rounded-lg overflow-hidden border transition-all duration-200 cursor-pointer flex flex-col h-full", 
         selected ? "shadow-lg border-primary" : "hover:shadow-md hover:border-muted-foreground/50"
       )}
       onMouseEnter={onMouseEnter}
@@ -61,11 +61,11 @@ export function PropertyCard({ property, selected = false, onMouseEnter, onMouse
         </Button>
          <Badge className="absolute bottom-2 left-2">{property.type}</Badge>
       </div>
-      <div className="p-3">
+      <div className="p-3 flex flex-col flex-grow">
         <div className="flex justify-between items-start">
             <div>
                 <h3 className="font-semibold text-base leading-tight truncate" title={property.title}>
-                    {property.title}
+                    <Link href={`/properties/${property.id}`} className="hover:underline">{property.title}</Link>
                 </h3>
                 <p className="text-muted-foreground text-xs">{property.location}</p>
             </div>
@@ -73,7 +73,7 @@ export function PropertyCard({ property, selected = false, onMouseEnter, onMouse
         
         <p className="text-lg font-bold mt-2">{formatPrice(property.price)}</p>
         
-        <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2 border-t pt-2">
+        <div className="flex items-center flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground mt-2 border-t pt-2 flex-grow content-end">
             {property.beds > 0 && (
                 <span className="flex items-center gap-1.5">
                     <BedDouble className="h-3 w-3" />

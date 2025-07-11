@@ -8,6 +8,8 @@ import { Header } from './header';
 import type { FilterState } from './property-search-filter';
 import { PropertyList } from './property-list';
 import { cn } from '@/lib/utils';
+import { ScrollArea } from './ui/scroll-area';
+import { PropertyCard } from './property-card';
 
 interface PropertyListingsProps {
   properties: Property[];
@@ -25,6 +27,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
   const router = useRouter();
   const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
 
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
@@ -83,33 +86,62 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
   }, []);
   
   return (
-    <div className="relative w-full h-full">
-      <Header filters={filters} onFilterChange={handleFilterChange} showFilters={true} />
-       <div className="grid grid-cols-12 h-full pt-24">
-        {filteredProperties.length > 0 && (
-         <div className="col-span-4 lg:col-span-3 h-full overflow-y-auto pr-2">
-            <PropertyList 
-              properties={filteredProperties}
-              onCardClick={handleCardClick}
-              onCardHover={handleCardHover}
-              selectedPropertyId={selectedPropertyId}
-              hoveredPropertyId={hoveredPropertyId}
-            />
-         </div>
+    <div className="relative w-full h-full flex flex-col">
+      <Header 
+        filters={filters} 
+        onFilterChange={handleFilterChange} 
+        showFilters={true} 
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+      />
+      <div className="flex-grow pt-24">
+        {viewMode === 'map' ? (
+          <div className="relative w-full h-full">
+            <div className="absolute top-0 left-0 h-full w-full z-0">
+              <PropertyMap
+                properties={filteredProperties}
+                apiKey={apiKey}
+                selectedPropertyId={selectedPropertyId}
+                hoveredPropertyId={hoveredPropertyId}
+                onMarkerClick={handleMarkerClick}
+                onMarkerHover={handleMarkerHover}
+              />
+            </div>
+            {filteredProperties.length > 0 && (
+              <div className="absolute top-4 left-4 z-10 w-[380px] h-[calc(100%-2rem)] bg-card rounded-lg shadow-lg overflow-hidden">
+                <PropertyList 
+                  properties={filteredProperties}
+                  onCardClick={handleCardClick}
+                  onCardHover={handleCardHover}
+                  selectedPropertyId={selectedPropertyId}
+                  hoveredPropertyId={hoveredPropertyId}
+                />
+              </div>
+            )}
+          </div>
+        ) : (
+          <ScrollArea className="h-full">
+            <div className="container mx-auto px-4 py-4">
+              {filteredProperties.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                  {filteredProperties.map(property => (
+                    <PropertyCard
+                      key={property.id}
+                      property={property}
+                      onMouseEnter={() => {}}
+                      onMouseLeave={() => {}}
+                      onClick={() => handleCardClick(property)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center h-[50vh]">
+                  <p className="text-muted-foreground text-lg">Tidak ada properti yang cocok dengan kriteria Anda.</p>
+                </div>
+              )}
+            </div>
+          </ScrollArea>
         )}
-         <div className={cn(
-            "h-full rounded-lg overflow-hidden",
-            filteredProperties.length > 0 ? "col-span-8 lg:col-span-9" : "col-span-12"
-          )}>
-            <PropertyMap
-              properties={filteredProperties}
-              apiKey={apiKey}
-              selectedPropertyId={selectedPropertyId}
-              hoveredPropertyId={hoveredPropertyId}
-              onMarkerClick={handleMarkerClick}
-              onMarkerHover={handleMarkerHover}
-            />
-        </div>
       </div>
     </div>
   );
