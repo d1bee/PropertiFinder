@@ -122,7 +122,7 @@ export function PropertySearchFilter({ filters, onFilterChange, isMobile = false
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full bg-white/90">
+          <Button variant="outline" className="rounded-full bg-white/90 text-primary">
             {getDropdownLabel(filters.propertyType, 'Tipe Properti')}
             <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
@@ -140,7 +140,7 @@ export function PropertySearchFilter({ filters, onFilterChange, isMobile = false
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full bg-white/90">
+          <Button variant="outline" className="rounded-full bg-white/90 text-primary">
              {getDropdownLabel(filters.priceSort, 'Harga')}
             <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
@@ -158,7 +158,7 @@ export function PropertySearchFilter({ filters, onFilterChange, isMobile = false
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full bg-white/90">
+          <Button variant="outline" className="rounded-full bg-white/90 text-primary">
              {getDropdownLabel(filters.buildingArea, 'Luas Bangunan')}
             <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
@@ -176,7 +176,7 @@ export function PropertySearchFilter({ filters, onFilterChange, isMobile = false
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full bg-white/90">
+          <Button variant="outline" className="rounded-full bg-white/90 text-primary">
              {getDropdownLabel(filters.landArea, 'Luas Tanah')}
             <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
