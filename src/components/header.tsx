@@ -79,7 +79,7 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
                         size="sm"
                         variant={viewMode === 'list' ? 'secondary': 'ghost'}
                         onClick={() => onViewModeChange('list')}
-                        className={cn("rounded-full h-8 text-white", viewMode === 'list' ? 'text-primary-foreground' : 'hover:bg-white/20 hover:text-white')}
+                        className={cn("rounded-full h-8", viewMode === 'list' ? 'text-primary-foreground' : 'text-white hover:bg-white/20 hover:text-white')}
                       >
                          <List className="h-4 w-4 sm:mr-2"/>
                          <span className="hidden sm:inline">Daftar</span>
@@ -88,7 +88,7 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
                         size="sm"
                         variant={viewMode === 'map' ? 'secondary': 'ghost'}
                         onClick={() => onViewModeChange('map')}
-                        className={cn("rounded-full h-8 text-white", viewMode === 'map' ? 'text-primary-foreground' : 'hover:bg-white/20 hover:text-white')}
+                        className={cn("rounded-full h-8", viewMode === 'map' ? 'text-primary-foreground' : 'text-white hover:bg-white/20 hover:text-white')}
                       >
                         <Map className="h-4 w-4 sm:mr-2"/>
                         <span className="hidden sm:inline">Peta</span>
