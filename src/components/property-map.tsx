@@ -66,7 +66,7 @@ export function PropertyMap({
           />
         </Map>
       </APIProvider>
-      <div className="absolute bottom-4 right-4 z-10">
+      <div className="absolute top-4 right-4 z-10">
         <Button onClick={onToggleSelectionMode} variant={isSelectionMode ? "secondary" : "outline"} className="rounded-full shadow-lg bg-background/90">
            {isSelectionMode ? <Check className="mr-2 h-4 w-4" /> : <Hand className="mr-2 h-4 w-4" />}
            {isSelectionMode ? 'Selesai Memilih' : 'Pilih Properti'}
