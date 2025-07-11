@@ -9,6 +9,7 @@ import { PropertySearchFilter, type FilterState } from './property-search-filter
 import { Badge } from './ui/badge';
 import { properties } from '@/lib/data';
 import Image from 'next/image';
+import { Logo } from './logo';
 
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('id-ID', {
@@ -46,7 +47,7 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center gap-8">
               <Link href="/" className="flex items-center gap-2">
-                 <h1 className="text-xl font-bold">Properti Batam dan Kepri</h1>
+                 <Logo className="h-10 w-auto text-primary" />
               </Link>
             </div>
             <div className="flex items-center gap-2">
@@ -65,7 +66,7 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <Link href="/" className="flex items-center gap-2">
-                      <h1 className="text-xl font-bold text-white">Properti Batam dan Kepri</h1>
+                      <Logo className="h-10 w-auto text-white" />
                   </Link>
                   {onViewModeChange && (
                     <div className="flex items-center gap-2 bg-black/20 p-1 rounded-full">
