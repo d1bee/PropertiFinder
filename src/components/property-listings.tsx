@@ -194,23 +194,38 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   return (
     <div className="relative w-full h-full flex flex-col">
        <div ref={headerRef} className="w-full">
-         <Header 
-            filters={filters} 
-            onFilterChange={handleFilterChange} 
-            showFilters={true} 
-            viewMode={viewMode}
-            onViewModeChange={(mode) => {
-              setViewMode(mode);
-              setSelectedPropertyForCard(null);
-            }}
-            onAddPropertyClick={() => handleAddDrawerOpen(true)}
-          />
+         {viewMode === 'map' && (
+           <Header 
+              filters={filters} 
+              onFilterChange={handleFilterChange} 
+              showFilters={true} 
+              viewMode={viewMode}
+              onViewModeChange={(mode) => {
+                setViewMode(mode);
+                setSelectedPropertyForCard(null);
+              }}
+              onAddPropertyClick={() => handleAddDrawerOpen(true)}
+            />
+          )}
        </div>
       <main className="flex-grow flex flex-col">
         <div className="flex-grow relative">
           <div className={viewMode === 'list' ? 'block' : 'hidden'}>
+             <div className="sticky top-0 z-10">
+                <Header 
+                  filters={filters} 
+                  onFilterChange={handleFilterChange} 
+                  showFilters={true} 
+                  viewMode={viewMode}
+                  onViewModeChange={(mode) => {
+                    setViewMode(mode);
+                    setSelectedPropertyForCard(null);
+                  }}
+                  onAddPropertyClick={() => handleAddDrawerOpen(true)}
+                />
+             </div>
              <ScrollArea className="h-full">
-                <div className="container mx-auto px-4 pt-24 pb-4">
+                <div className="container mx-auto px-4 py-4">
                   {filteredProperties.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                       {filteredProperties.map(property => (

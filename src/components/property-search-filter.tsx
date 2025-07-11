@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -14,6 +15,7 @@ import { Search, ChevronDown } from 'lucide-react';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Label } from './ui/label';
+import { cn } from '@/lib/utils';
 
 export type FilterState = {
   searchTerm: string;
@@ -27,13 +29,14 @@ interface PropertySearchFilterProps {
   filters: FilterState;
   onFilterChange: (filters: Partial<FilterState>) => void;
   isMobile?: boolean;
+  viewMode?: 'map' | 'list';
 }
 
 const propertyTypes = ['Semua', 'Rumah', 'Apartemen', 'Tanah Kosong', 'Gudang', 'Ruko', 'Galangan Kapal', 'Pabrik'];
 const priceSortOptions = ['Default', 'Harga Terendah', 'Harga Tertinggi'];
 const areaRanges = ['Semua', '0-100', '101-200', '201-500', '501-1000', '1000+'];
 
-export function PropertySearchFilter({ filters, onFilterChange, isMobile = false }: PropertySearchFilterProps) {
+export function PropertySearchFilter({ filters, onFilterChange, isMobile = false, viewMode = 'map' }: PropertySearchFilterProps) {
   const getDropdownLabel = (value: string, defaultValue: string) => {
     if (value === 'Semua' || value === 'Default' || !value) {
       return defaultValue;
@@ -114,7 +117,7 @@ export function PropertySearchFilter({ filters, onFilterChange, isMobile = false
         <Input
           id="search"
           placeholder="Cari berdasarkan lokasi, judul..."
-          className="pl-10 h-10 rounded-full w-full bg-white/90"
+          className={cn("pl-10 h-10 rounded-full w-full", viewMode === 'map' ? 'bg-white/90' : 'bg-secondary')}
           value={filters.searchTerm}
           onChange={(e) => onFilterChange({ searchTerm: e.target.value })}
         />
@@ -122,7 +125,7 @@ export function PropertySearchFilter({ filters, onFilterChange, isMobile = false
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full bg-white/90 text-primary">
+          <Button variant="outline" className={cn("rounded-full text-primary", viewMode === 'map' ? 'bg-white/90' : 'bg-secondary')}>
             {getDropdownLabel(filters.propertyType, 'Tipe Properti')}
             <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
@@ -140,7 +143,7 @@ export function PropertySearchFilter({ filters, onFilterChange, isMobile = false
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full bg-white/90 text-primary">
+          <Button variant="outline" className={cn("rounded-full text-primary", viewMode === 'map' ? 'bg-white/90' : 'bg-secondary')}>
              {getDropdownLabel(filters.priceSort, 'Harga')}
             <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
@@ -158,7 +161,7 @@ export function PropertySearchFilter({ filters, onFilterChange, isMobile = false
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full bg-white/90 text-primary">
+          <Button variant="outline" className={cn("rounded-full text-primary", viewMode === 'map' ? 'bg-white/90' : 'bg-secondary')}>
              {getDropdownLabel(filters.buildingArea, 'Luas Bangunan')}
             <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
@@ -176,7 +179,7 @@ export function PropertySearchFilter({ filters, onFilterChange, isMobile = false
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full bg-white/90 text-primary">
+          <Button variant="outline" className={cn("rounded-full text-primary", viewMode === 'map' ? 'bg-white/90' : 'bg-secondary')}>
              {getDropdownLabel(filters.landArea, 'Luas Tanah')}
             <ChevronDown className="ml-2 h-4 w-4" />
           </Button>

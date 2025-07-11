@@ -41,8 +41,8 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
 
   return (
     <header className={cn(
-        "sticky top-0 z-50 shadow-sm",
-        isPropertiesPage ? "bg-transparent absolute w-full top-0 bg-gradient-to-b from-black/50 to-transparent" : "bg-card border-b"
+        "z-50 shadow-sm",
+        isPropertiesPage && viewMode === 'map' ? "bg-transparent absolute w-full top-0 bg-gradient-to-b from-black/50 to-transparent" : "bg-card border-b"
     )}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {!isPropertiesPage ? (
@@ -72,7 +72,7 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
              <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <Link href="/" className="hidden sm:flex items-center gap-2">
-                      <h1 className="text-xl font-bold text-white">Batam Pro</h1>
+                      <h1 className={cn("text-xl font-bold", viewMode === 'map' ? 'text-white' : 'text-primary')}>Batam Pro</h1>
                   </Link>
                   {onViewModeChange && (
                     <div className="flex items-center gap-2 bg-black/20 p-1 rounded-full">
@@ -114,7 +114,7 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
                         </div>
                     </div>
                     ) : (
-                        showFilters && filters && onFilterChange && <PropertySearchFilter filters={filters} onFilterChange={onFilterChange} />
+                        showFilters && filters && onFilterChange && <PropertySearchFilter filters={filters} onFilterChange={onFilterChange} viewMode={viewMode}/>
                     )}
                  </div>
                  <div className="flex items-center gap-2">
@@ -122,7 +122,7 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
                         {showFilters && filters && onFilterChange && (
                              <Sheet>
                                 <SheetTrigger asChild>
-                                    <Button variant="outline" className="rounded-full bg-white/90">
+                                    <Button variant="outline" className={cn("rounded-full", viewMode === 'map' ? 'bg-white/90' : 'bg-background')}>
                                         <Filter className="mr-2 h-4 w-4"/>
                                         Filter
                                     </Button>
@@ -142,15 +142,15 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
                         )}
                     </div>
                     {onAddPropertyClick && (
-                      <Button onClick={onAddPropertyClick} variant="outline" className="rounded-full bg-white/90 text-primary hover:bg-white hidden sm:flex">
+                      <Button onClick={onAddPropertyClick} variant="outline" className={cn("rounded-full text-primary hover:bg-white hidden sm:flex", viewMode === 'map' ? 'bg-white/90' : 'bg-background')}>
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Tambah Properti
                       </Button>
                     )}
-                    <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white hidden sm:flex">
+                    <Button variant="ghost" size="icon" className={cn("hover:bg-white/20 hover:text-white hidden sm:flex", viewMode === 'map' ? 'text-white' : 'text-primary')}>
                         <Heart className="h-5 w-5" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white hidden sm:flex">
+                    <Button variant="ghost" size="icon" className={cn("hover:bg-white/20 hover:text-white hidden sm:flex", viewMode === 'map' ? 'text-white' : 'text-primary')}>
                         <User className="h-5 w-5" />
                     </Button>
                 </div>
