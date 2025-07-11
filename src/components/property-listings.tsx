@@ -126,18 +126,19 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
 
       const clickX = event.domEvent.clientX;
       const clickY = event.domEvent.clientY;
+      
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
       let x = clickX + PADDING;
       let y = clickY + PADDING;
       
-      if (x + CARD_WIDTH > windowWidth - PADDING) {
-        x = windowWidth - CARD_WIDTH - PADDING;
-      }
-
       if (x < PADDING) {
           x = PADDING;
+      }
+      
+      if (x + CARD_WIDTH > windowWidth - PADDING) {
+        x = windowWidth - CARD_WIDTH - PADDING;
       }
       
       if (y + CARD_HEIGHT > windowHeight - PADDING) {
@@ -207,10 +208,10 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
             onAddPropertyClick={() => handleAddDrawerOpen(true)}
           />
        </div>
-      <main className="flex-grow flex flex-col">
+      <main className="flex-grow flex flex-col mt-20">
         <div className="flex-grow relative">
           <div className={viewMode === 'list' ? 'block' : 'hidden'}>
-             <ScrollArea className="h-[calc(100vh-theme(spacing.40)-40px)] sm:h-[calc(100vh-theme(spacing.40))]">
+             <ScrollArea className="h-full">
                 <div className="container mx-auto px-4 pt-8 pb-4">
                   {filteredProperties.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
