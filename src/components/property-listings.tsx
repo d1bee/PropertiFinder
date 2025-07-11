@@ -135,13 +135,19 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       if (x + CARD_WIDTH > windowWidth - PADDING) {
         x = windowWidth - CARD_WIDTH - PADDING;
       }
+
+      if (x < PADDING) {
+          x = PADDING;
+      }
       
       if (y + CARD_HEIGHT > windowHeight - PADDING) {
         y = windowHeight - CARD_HEIGHT - PADDING;
       }
       
-      x = Math.max(PADDING, x);
-      y = Math.max(headerHeight + PADDING, y);
+      if (y < headerHeight + PADDING) {
+        y = headerHeight + PADDING;
+      }
+      
 
       setCardPosition({ x, y });
 
@@ -205,7 +211,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
         <div className="flex-grow relative">
           <div className={viewMode === 'list' ? 'block' : 'hidden'}>
              <ScrollArea className="h-[calc(100vh-theme(spacing.40)-40px)] sm:h-[calc(100vh-theme(spacing.40))]">
-                <div className="container mx-auto px-4 py-4">
+                <div className="container mx-auto px-4 pt-8 pb-4">
                   {filteredProperties.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                       {filteredProperties.map(property => (
