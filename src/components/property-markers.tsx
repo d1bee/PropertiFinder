@@ -11,17 +11,22 @@ interface PropertyMarkersProps {
   onMarkerClick: (propertyId: string) => void;
 }
 
-const ICONS = {
-    Rumah: { path: google.maps.SymbolPath.CIRCLE, color: '#10B981', scale: 8 },
-    Apartemen: { path: google.maps.SymbolPath.CIRCLE, color: '#3B82F6', scale: 8 },
-    'Tanah Kosong': { path: google.maps.SymbolPath.CIRCLE, color: '#F97316', scale: 8 },
-    Gudang: { path: google.maps.SymbolPath.CIRCLE, color: '#6B7280', scale: 8 },
-    Ruko: { path: google.maps.SymbolPath.CIRCLE, color: '#A855F7', scale: 8 },
-    'Galangan Kapal': { path: google.maps.SymbolPath.CIRCLE, color: '#06B6D4', scale: 8 },
-    Pabrik: { path: google.maps.SymbolPath.CIRCLE, color: '#4B5563', scale: 8 },
-};
-
 const getIcon = (type: Property['type']): google.maps.Icon => {
+    if (typeof window === 'undefined' || !window.google) {
+        // Return a default or null icon if google object is not available
+        return {}; 
+    }
+
+    const ICONS = {
+        Rumah: { path: google.maps.SymbolPath.CIRCLE, color: '#10B981', scale: 8 },
+        Apartemen: { path: google.maps.SymbolPath.CIRCLE, color: '#3B82F6', scale: 8 },
+        'Tanah Kosong': { path: google.maps.SymbolPath.CIRCLE, color: '#F97316', scale: 8 },
+        Gudang: { path: google.maps.SymbolPath.CIRCLE, color: '#6B7280', scale: 8 },
+        Ruko: { path: google.maps.SymbolPath.CIRCLE, color: '#A855F7', scale: 8 },
+        'Galangan Kapal': { path: google.maps.SymbolPath.CIRCLE, color: '#06B6D4', scale: 8 },
+        Pabrik: { path: google.maps.SymbolPath.CIRCLE, color: '#4B5563', scale: 8 },
+    };
+
     const iconConfig = ICONS[type] || { path: google.maps.SymbolPath.CIRCLE, color: '#EF4444', scale: 8 };
     return {
         path: iconConfig.path,
