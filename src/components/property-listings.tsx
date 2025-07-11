@@ -180,7 +180,13 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
       </div>
        <Drawer open={isAddDrawerOpen} onOpenChange={setIsAddDrawerOpen}>
         <DrawerContent>
-           <AddPropertyForm onSubmit={handleAddProperty} onCancel={() => setIsAddDrawerOpen(false)} />
+           <DrawerHeader className="text-left">
+              <DrawerTitle>Add New Property</DrawerTitle>
+              <DrawerDescription>Fill in the details for the new property. Click "Add Property" when you're done.</DrawerDescription>
+            </DrawerHeader>
+           <div className="p-4 pt-0">
+             <AddPropertyForm onSubmit={handleAddProperty} onCancel={() => setIsAddDrawerOpen(false)} />
+           </div>
         </DrawerContent>
       </Drawer>
     </div>

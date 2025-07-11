@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
+import { Card, CardContent, CardFooter } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
 
 const propertyTypes = ['Rumah', 'Apartemen', 'Tanah Kosong', 'Gudang', 'Ruko', 'Galangan Kapal', 'Pabrik'] as const;
@@ -64,14 +64,10 @@ export function AddPropertyForm({ onSubmit, onCancel }: AddPropertyFormProps) {
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto border-0 shadow-none">
+    <Card className="w-full max-w-4xl mx-auto border-0 shadow-none p-0">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <CardHeader>
-            <CardTitle>Add New Property</CardTitle>
-            <CardDescription>Fill in the details for the new property. Click "Add Property" when you're done.</CardDescription>
-          </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <ScrollArea className="h-[60vh] pr-4">
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -124,7 +120,7 @@ export function AddPropertyForm({ onSubmit, onCancel }: AddPropertyFormProps) {
               </div>
             </ScrollArea>
           </CardContent>
-          <CardFooter className="flex justify-end gap-2">
+          <CardFooter className="flex justify-end gap-2 p-0 pt-4">
             <Button type="button" variant="ghost" onClick={onCancel}>Cancel</Button>
             <Button type="submit">Add Property</Button>
           </CardFooter>
