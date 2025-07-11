@@ -72,6 +72,15 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
   const handleCardHover = useCallback((propertyId: string | null) => {
     setHoveredPropertyId(propertyId);
   }, []);
+
+  const handleMarkerClick = useCallback((propertyId: string) => {
+    setSelectedPropertyId(propertyId);
+    router.push(`/properties/${propertyId}`);
+  }, [router]);
+
+  const handleMarkerHover = useCallback((propertyId: string | null) => {
+    setHoveredPropertyId(propertyId);
+  }, []);
   
   return (
     <div className="relative w-full h-full">
@@ -92,7 +101,14 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
             "h-full rounded-lg overflow-hidden",
             filteredProperties.length > 0 ? "col-span-8 lg:col-span-9" : "col-span-12"
           )}>
-            <PropertyMap />
+            <PropertyMap
+              properties={filteredProperties}
+              apiKey={apiKey}
+              selectedPropertyId={selectedPropertyId}
+              hoveredPropertyId={hoveredPropertyId}
+              onMarkerClick={handleMarkerClick}
+              onMarkerHover={handleMarkerHover}
+            />
         </div>
       </div>
     </div>
