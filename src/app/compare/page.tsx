@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
+
 
 const formatPrice = (price: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -17,33 +19,29 @@ const formatPrice = (price: number) => {
     }).format(price);
 };
 
-const exportToCsv = (properties: Property[]) => {
+const exportToExcel = (properties: Property[]) => {
     if (properties.length === 0) return;
 
     const headers = ['ID', 'Title', 'Type', 'Location', 'Price (IDR)', 'Bedrooms', 'Bathrooms', 'Building Area (m²)', 'Land Area (m²)', 'Features'];
-    const rows = properties.map(p => [
-        p.id,
-        `"${p.title.replace(/"/g, '""')}"`,
-        p.type,
-        `"${p.location.replace(/"/g, '""')}"`,
-        p.price,
-        p.beds,
-        p.baths,
-        p.buildingArea,
-        p.landArea,
-        `"${p.features.join(', ').replace(/"/g, '""')}"`
-    ]);
+    const data = properties.map(p => ({
+        ID: p.id,
+        Title: p.title,
+        Type: p.type,
+        Location: p.location,
+        'Price (IDR)': p.price,
+        Bedrooms: p.beds,
+        Bathrooms: p.baths,
+        'Building Area (m²)': p.buildingArea,
+        'Land Area (m²)': p.landArea,
+        Features: p.features.join(', ')
+    }));
 
-    const csvContent = "data:text/csv;charset=utf-8," 
-        + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "property_comparison.csv");
-    document.body.appendChild(link); 
-    link.click();
-    document.body.removeChild(link);
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Properties');
+    
+    XLSX.writeFile(workbook, 'property_comparison.xlsx');
 };
 
 export default function ComparePage() {
@@ -52,7 +50,7 @@ export default function ComparePage() {
     const selectedProperties = properties.filter(p => ids.includes(p.id));
 
     const handleExport = () => {
-        exportToCsv(selectedProperties);
+        exportToExcel(selectedProperties);
     };
 
     return (
