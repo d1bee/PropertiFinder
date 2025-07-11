@@ -7,6 +7,7 @@ import { PropertyMap } from '@/components/property-map';
 import { Header } from './header';
 import type { FilterState } from './property-search-filter';
 import { PropertyList } from './property-list';
+import { cn } from '@/lib/utils';
 
 interface PropertyListingsProps {
   properties: Property[];
@@ -84,6 +85,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
     <div className="relative w-full h-full">
       <Header filters={filters} onFilterChange={handleFilterChange} showFilters={true} />
        <div className="grid grid-cols-12 h-full pt-24">
+        {filteredProperties.length > 0 && (
          <div className="col-span-4 lg:col-span-3 h-full overflow-y-auto pr-2">
             <PropertyList 
               properties={filteredProperties}
@@ -93,7 +95,11 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
               hoveredPropertyId={hoveredPropertyId}
             />
          </div>
-         <div className="col-span-8 lg:col-span-9 h-full rounded-lg overflow-hidden">
+        )}
+         <div className={cn(
+            "h-full rounded-lg overflow-hidden",
+            filteredProperties.length > 0 ? "col-span-8 lg:col-span-9" : "col-span-12"
+          )}>
             {apiKey ? (
                 <PropertyMap
                 properties={filteredProperties}
