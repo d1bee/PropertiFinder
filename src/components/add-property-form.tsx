@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardFooter } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
+import { useEffect } from 'react';
 
 const propertyTypes = ['Rumah', 'Apartemen', 'Tanah Kosong', 'Gudang', 'Ruko', 'Galangan Kapal', 'Pabrik'] as const;
 
@@ -27,16 +28,21 @@ const formSchema = z.object({
   description: z.string().min(10, { message: 'Description must be at least 10 characters.' }),
   features: z.string().min(3, { message: 'Please list at least one feature.' }),
   images: z.string().url({ message: 'Please enter a valid image URL.' }),
+  coordinates: z.object({
+    lat: z.coerce.number(),
+    lng: z.coerce.number(),
+  }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 interface AddPropertyFormProps {
-  onSubmit: (data: Omit<Property, 'id' | 'coordinates'>) => void;
+  onSubmit: (data: Omit<Property, 'id'>) => void;
   onCancel: () => void;
+  initialCoordinates?: { lat: number; lng: number } | null;
 }
 
-export function AddPropertyForm({ onSubmit, onCancel }: AddPropertyFormProps) {
+export function AddPropertyForm({ onSubmit, onCancel, initialCoordinates }: AddPropertyFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,8 +57,15 @@ export function AddPropertyForm({ onSubmit, onCancel }: AddPropertyFormProps) {
       description: '',
       features: '',
       images: 'https://placehold.co/600x400.png',
+      coordinates: initialCoordinates || { lat: 0, lng: 0 },
     },
   });
+
+  useEffect(() => {
+    if (initialCoordinates) {
+        form.setValue('coordinates', initialCoordinates);
+    }
+  }, [initialCoordinates, form]);
 
   const handleSubmit = (values: FormValues) => {
     const propertyData = {
@@ -106,6 +119,14 @@ export function AddPropertyForm({ onSubmit, onCancel }: AddPropertyFormProps) {
                     )} />
                     <FormField control={form.control} name="landArea" render={({ field }) => (
                         <FormItem><FormLabel>Land Area (m²)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                 </div>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField control={form.control} name="coordinates.lat" render={({ field }) => (
+                        <FormItem><FormLabel>Latitude</FormLabel><FormControl><Input type="number" disabled {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                     <FormField control={form.control} name="coordinates.lng" render={({ field }) => (
+                        <FormItem><FormLabel>Longitude</FormLabel><FormControl><Input type="number" disabled {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                  </div>
                 <FormField control={form.control} name="description" render={({ field }) => (

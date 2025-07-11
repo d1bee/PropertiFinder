@@ -35,6 +35,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [selectedPropertyForCard, setSelectedPropertyForCard] = useState<Property | null>(null);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [newPropertyCoords, setNewPropertyCoords] = useState<{lat: number; lng: number} | null>(null);
 
   const draggableRef = useRef<HTMLDivElement>(null);
 
@@ -128,23 +129,35 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
     }
   }, [isSelectionMode]);
   
+  const handleMapRightClick = useCallback((e: google.maps.MapMouseEvent) => {
+    if (e.latLng) {
+      const coords = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+      setNewPropertyCoords(coords);
+      setIsAddDrawerOpen(true);
+    }
+  }, []);
+
+  const handleAddDrawerOpen = (open: boolean) => {
+      setIsAddDrawerOpen(open);
+      if (!open) {
+          setNewPropertyCoords(null);
+      }
+  }
+  
   const handleCompareClick = () => {
     if (selectedPropertyIds.length > 0) {
       router.push(`/compare?ids=${selectedPropertyIds.join(',')}`);
     }
   };
 
-  const handleAddProperty = (newPropertyData: Omit<Property, 'id' | 'coordinates'>) => {
+  const handleAddProperty = (newPropertyData: Omit<Property, 'id'>) => {
       const newProperty: Property = {
         id: (properties.length + 100).toString(),
-        ...newPropertyData,
-        coordinates: {
-          lat: 1.118 + (Math.random() - 0.5) * 0.1,
-          lng: 104.048 + (Math.random() - 0.5) * 0.1,
-        },
+        ...newPropertyData
       };
       setProperties(prev => [...prev, newProperty]);
       setIsAddDrawerOpen(false);
+      setNewPropertyCoords(null);
   };
 
   const handleToggleSelectionMode = () => {
@@ -166,9 +179,9 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
           setViewMode(mode);
           setSelectedPropertyForCard(null);
         }}
-        onAddPropertyClick={() => setIsAddDrawerOpen(true)}
+        onAddPropertyClick={() => handleAddDrawerOpen(true)}
       />
-      <main className="flex-grow pt-[120px] sm:pt-40 flex flex-col">
+      <main className="flex-grow pt-[120px] flex flex-col">
         <div className="flex-grow relative">
           <div className={viewMode === 'list' ? 'block' : 'hidden'}>
              <ScrollArea className="h-[calc(100vh-theme(spacing.40)-40px)] sm:h-[calc(100vh-theme(spacing.40))]">
@@ -204,6 +217,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               apiKey={apiKey}
               onMarkerClick={handleMarkerClick}
               onMapClick={handleMapClick}
+              onMapRightClick={handleMapRightClick}
               selectedPropertyIds={selectedPropertyIds}
               hoveredPropertyId={hoveredPropertyId}
               isSelectionMode={isSelectionMode}
@@ -239,14 +253,18 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
           </div>
        )}
 
-       <Drawer open={isAddDrawerOpen} onOpenChange={setIsAddDrawerOpen}>
+       <Drawer open={isAddDrawerOpen} onOpenChange={handleAddDrawerOpen}>
         <DrawerContent>
            <DrawerHeader className="text-left">
               <DrawerTitle>Add New Property</DrawerTitle>
-              <DrawerDescription>Fill in the details for the new property. Click "Add Property" when you're done.</DrawerDescription>
+              <DrawerDescription>Fill in the details for the new property. Right-click on the map to set coordinates. Click "Add Property" when you're done.</DrawerDescription>
             </DrawerHeader>
            <div className="p-4 pt-0">
-             <AddPropertyForm onSubmit={handleAddProperty} onCancel={() => setIsAddDrawerOpen(false)} />
+             <AddPropertyForm 
+                onSubmit={handleAddProperty} 
+                onCancel={() => handleAddDrawerOpen(false)}
+                initialCoordinates={newPropertyCoords}
+             />
            </div>
         </DrawerContent>
       </Drawer>

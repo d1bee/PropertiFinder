@@ -13,6 +13,7 @@ interface PropertyMapProps {
   apiKey?: string;
   onMarkerClick: (property: Property) => void;
   onMapClick: (e: google.maps.MapMouseEvent) => void;
+  onMapRightClick: (e: google.maps.MapMouseEvent) => void;
   selectedPropertyIds: string[];
   hoveredPropertyId?: string | null;
   className?: string;
@@ -25,6 +26,7 @@ export function PropertyMap({
   apiKey,
   onMarkerClick,
   onMapClick,
+  onMapRightClick,
   selectedPropertyIds,
   hoveredPropertyId,
   className,
@@ -54,6 +56,7 @@ export function PropertyMap({
           disableDefaultUI={true}
           mapId="e8c2865d3c829e0"
           onClick={onMapClick}
+          onRightClick={onMapRightClick}
         >
           <PropertyMarkers
             properties={properties}
@@ -63,7 +66,7 @@ export function PropertyMap({
           />
         </Map>
       </APIProvider>
-      <div className="absolute top-4 right-4 z-10">
+      <div className="absolute bottom-4 right-4 z-10">
         <Button onClick={onToggleSelectionMode} variant={isSelectionMode ? "secondary" : "outline"} className="rounded-full shadow-lg bg-background/90">
            {isSelectionMode ? <Check className="mr-2 h-4 w-4" /> : <Hand className="mr-2 h-4 w-4" />}
            {isSelectionMode ? 'Selesai Memilih' : 'Pilih Properti'}
