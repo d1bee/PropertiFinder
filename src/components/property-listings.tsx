@@ -172,9 +172,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
     if (newSelectionMode) {
       setSelectedPropertyForCard(null); 
     }
-    if (!newSelectionMode) {
-      setSelectedPropertyIds([]);
-    }
   };
   
   return (
@@ -279,3 +276,5 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
     </div>
   );
 }
+
+    
