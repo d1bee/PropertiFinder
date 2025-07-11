@@ -18,7 +18,7 @@ const formatPrice = (price: number) => {
   }).format(price);
 };
 
-export default function PropertyDetailPage({ params }: { params: { id: string } }) {
+const PropertyDetailPageClient = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const property = properties.find((p) => p.id === params.id);
 
@@ -198,4 +198,8 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
       </div>
     </div>
   );
+}
+
+export default function PropertyDetailPage({ params }: { params: { id: string } }) {
+  return <PropertyDetailPageClient params={params} />;
 }

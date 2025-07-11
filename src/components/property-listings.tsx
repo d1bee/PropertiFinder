@@ -24,9 +24,9 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[calc(100vh-180px)]">
-            <div className="lg:col-span-7 flex flex-col">
+            <div className="lg:col-span-5 flex flex-col">
                 <div className="flex justify-between items-center mb-4 px-1">
-                    <h2 className="text-lg font-semibold">{properties.length} New York Properties For Rent</h2>
+                    <h2 className="text-lg font-semibold">{properties.length} Batam Properties For Rent</h2>
                     <Select>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Sort By" />
@@ -40,7 +40,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
                 </div>
                 <ScrollArea className="flex-grow pr-4 -mr-4">
                     <div id="property-list" className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {properties.slice(0, 10).map((property) => (
+                        {properties.map((property) => (
                             <div key={property.id} id={`property-card-${property.id}`}>
                                 <PropertyCard property={property} selected={selectedProperty?.id === property.id} />
                             </div>
@@ -52,7 +52,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
                 </div>
             </div>
 
-            <div className="hidden lg:block lg:col-span-5 h-full">
+            <div className="hidden lg:block lg:col-span-7 h-full">
                 {apiKey ? (
                     <PropertyMap properties={properties} apiKey={apiKey} onMarkerClick={handleMarkerClick} />
                 ) : (
