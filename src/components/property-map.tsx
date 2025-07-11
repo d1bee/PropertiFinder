@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
+import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 import type { Property } from '@/lib/data';
 
 type PropertyMapProps = {
@@ -31,27 +31,29 @@ export function PropertyMap({ properties, apiKey, onMarkerClick }: PropertyMapPr
   };
   
   return (
-    <APIProvider apiKey={apiKey}>
-      <Map
-        defaultCenter={center}
-        defaultZoom={12}
-        mapId="PROPERTI_FINDER_MAP_NEW"
-        gestureHandling={'greedy'}
-        disableDefaultUI={true}
-        className="rounded-lg"
-      >
-        {properties.map((property) => (
-          <AdvancedMarker
-            key={property.id}
-            position={property.coordinates}
-            onClick={() => handleMarkerClick(property)}
-          >
-             <div className="px-2 py-1 bg-card text-card-foreground rounded-full shadow-md text-sm font-semibold border">
-              {formatPrice(property.price)}
-            </div>
-          </AdvancedMarker>
-        ))}
-      </Map>
-    </APIProvider>
+    <div className="w-full h-full rounded-lg overflow-hidden">
+        <APIProvider apiKey={apiKey}>
+            <Map
+                defaultCenter={center}
+                defaultZoom={12}
+                mapId="PROPERTI_FINDER_MAP_NEW"
+                gestureHandling={'greedy'}
+                disableDefaultUI={true}
+                className="w-full h-full"
+            >
+                {properties.map((property) => (
+                <AdvancedMarker
+                    key={property.id}
+                    position={property.coordinates}
+                    onClick={() => handleMarkerClick(property)}
+                >
+                    <div className="px-2 py-1 bg-card text-card-foreground rounded-full shadow-md text-sm font-semibold border hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
+                    {formatPrice(property.price)}
+                    </div>
+                </AdvancedMarker>
+                ))}
+            </Map>
+        </APIProvider>
+    </div>
   );
 }

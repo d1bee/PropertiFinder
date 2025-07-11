@@ -3,9 +3,11 @@ import Image from 'next/image';
 import { BedDouble, Bath, Star, Heart } from 'lucide-react';
 import type { Property } from '@/lib/data';
 import { Button } from './ui/button';
+import { cn } from '@/lib/utils';
 
 type PropertyCardProps = {
   property: Property;
+  selected?: boolean;
 };
 
 const formatPrice = (price: number) => {
@@ -26,9 +28,9 @@ const getAIHint = (type: Property['type']) => {
   }
 }
 
-export function PropertyCard({ property }: PropertyCardProps) {
+export function PropertyCard({ property, selected = false }: PropertyCardProps) {
   return (
-    <div className="bg-card rounded-lg overflow-hidden border">
+    <div className={cn("bg-card rounded-lg overflow-hidden border transition-shadow", selected && "shadow-lg border-primary")}>
       <div className="relative">
         <Link href={`/properties/${property.id}`}>
           <Image
