@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import type { Property } from '@/lib/data';
@@ -9,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from './ui/badge';
-import { BedDouble, Bath, Square } from 'lucide-react';
 
 interface PropertyListingsProps {
     properties: Property[];
@@ -20,6 +20,8 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const cardRef = useRef<HTMLDivElement>(null);
+
     const selectedId = searchParams.get('id');
 
     const [selectedProperty, setSelectedProperty] = useState<Property | null>(
@@ -35,6 +37,31 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
         setSelectedProperty(null);
         router.push(pathname, { scroll: false });
     };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+                // Check if the click was on the map marker itself to prevent immediate closing
+                const marker = (event.target as HTMLElement).closest('[aria-label^="Map marker"]');
+                if (!marker) {
+                    handleCardClose();
+                }
+            }
+        };
+
+        if (selectedProperty) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [selectedProperty]);
+    
+    useEffect(() => {
+        const property = properties.find(p => p.id === selectedId) || null;
+        setSelectedProperty(property);
+    }, [selectedId, properties]);
 
     return (
         <div className="relative w-full h-full">
@@ -55,7 +82,7 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
             )}
             
             {selectedProperty && (
-                <div className="absolute top-4 right-4 w-full max-w-sm space-y-3">
+                <div ref={cardRef} className="absolute top-4 right-4 w-full max-w-sm space-y-3">
                     <Card className="overflow-hidden">
                         <CardHeader className="p-0">
                              <div className="relative">
@@ -84,9 +111,9 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
                              </div>
                         </CardHeader>
                         <CardContent className="p-4 space-y-2">
-                            <h3 className="text-xl font-bold">Dream House, New York</h3>
-                             <p className="text-sm text-muted-foreground">{selectedProperty.type} | {selectedProperty.beds} Beds | {selectedProperty.baths} Baths | {selectedProperty.area} sq.ft.</p>
-                            <p className="text-sm">{selectedProperty.description}</p>
+                            <h3 className="text-xl font-bold">{selectedProperty.title}</h3>
+                             <p className="text-sm text-muted-foreground">{selectedProperty.type} | {selectedProperty.beds} Beds | {selectedProperty.baths} Baths | {selectedProperty.area} m²</p>
+                            <p className="text-sm line-clamp-3">{selectedProperty.description}</p>
                         </CardContent>
                     </Card>
                     <Card>

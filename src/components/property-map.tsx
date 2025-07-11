@@ -1,3 +1,4 @@
+
 'use client';
 
 import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
@@ -12,15 +13,15 @@ type PropertyMapProps = {
 };
 
 export function PropertyMap({ properties, apiKey, onMarkerClick, selectedPropertyId }: PropertyMapProps) {
-  const center = { lat: 1.0827, lng: 104.0304 }; // Batam, Indonesia
+  const center = { lat: 1.118, lng: 104.048 }; // Batam Center, Batam
 
   return (
     <div className="w-full h-full">
         <APIProvider apiKey={apiKey}>
             <Map
                 defaultCenter={center}
-                defaultZoom={11}
-                mapId="PROPERTI_FINDER_MAP_NEW_2"
+                defaultZoom={12}
+                mapId="PROPERTI_FINDER_MAP_NEW_3"
                 gestureHandling={'greedy'}
                 disableDefaultUI={true}
                 className="w-full h-full"
@@ -74,6 +75,7 @@ export function PropertyMap({ properties, apiKey, onMarkerClick, selectedPropert
                         key={property.id}
                         position={property.coordinates}
                         onClick={() => onMarkerClick(property)}
+                        aria-label={`Map marker for ${property.title}`}
                     >
                         <div className={cn(
                             "w-4 h-4 rounded-full border-2 border-white shadow-md",
@@ -87,3 +89,4 @@ export function PropertyMap({ properties, apiKey, onMarkerClick, selectedPropert
     </div>
   );
 }
+
