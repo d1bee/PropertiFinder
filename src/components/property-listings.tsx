@@ -1,18 +1,12 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
 import type { Property } from '@/lib/data';
 import { PropertyMap } from '@/components/property-map';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from './ui/badge';
 import { Header } from './header';
 import type { FilterState } from './property-search-filter';
-import { Switch } from './ui/switch';
-import { Label } from './ui/label';
+import { PropertyList } from './property-list';
 
 interface PropertyListingsProps {
   properties: Property[];
@@ -30,11 +24,10 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const cardRef = useRef<HTMLDivElement>(null);
 
-  const selectedId = searchParams.get('id');
+  const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(searchParams.get('id'));
 
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
     propertyType: 'Semua',
@@ -74,120 +67,52 @@ export function PropertyListings({ properties, apiKey }: PropertyListingsProps) 
     });
   }, [properties, filters]);
 
-  const handleMarkerClick = (property: Property) => {
-    setSelectedProperty(property);
+  const handleMarkerClick = useCallback((property: Property) => {
+    setSelectedPropertyId(property.id);
     router.push(`${pathname}?id=${property.id}`, { scroll: false });
-  };
+  }, [pathname, router]);
 
-  const handleCardClose = useCallback(() => {
-    setSelectedProperty(null);
-    router.push(pathname, { scroll: false });
-  },[pathname, router]);
+  const handleMarkerHover = useCallback((propertyId: string | null) => {
+    setHoveredPropertyId(propertyId);
+  }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
-        const marker = (event.target as HTMLElement).closest('[role="button"]');
-        if (!marker) {
-          handleCardClose();
-        }
-      }
-    };
-
-    if (selectedProperty) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [selectedProperty, handleCardClose]);
-
-  useEffect(() => {
-    const property = properties.find(p => p.id === selectedId) || null;
-    setSelectedProperty(property);
-  }, [selectedId, properties]);
-
-  useEffect(() => {
-    if (selectedProperty && !filteredProperties.find(p => p.id === selectedProperty.id)) {
-      handleCardClose();
-    }
-  }, [filteredProperties, selectedProperty, handleCardClose]);
-
-
+  const handleCardClick = useCallback((property: Property) => {
+     router.push(`/properties/${property.id}`);
+  }, [router]);
+  
   return (
     <div className="relative w-full h-full">
       <Header filters={filters} onFilterChange={handleFilterChange} showFilters={true} />
-      {apiKey ? (
-        <PropertyMap
-          properties={filteredProperties}
-          apiKey={apiKey}
-          onMarkerClick={handleMarkerClick}
-          selectedPropertyId={selectedProperty?.id}
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center bg-muted rounded-lg">
-          <p className="text-center text-destructive p-4">
-            Google Maps API key is missing.
-            Please add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to your environment variables.
-          </p>
-        </div>
-      )}
-
-      {selectedProperty && (
-        <div ref={cardRef} className="absolute top-1/2 -translate-y-1/2 right-4 w-full max-w-sm space-y-3">
-          <Card className="overflow-hidden shadow-2xl">
-            <CardHeader className="p-0">
-              <div className="relative">
-                <Image
-                  src={selectedProperty.images[0]}
-                  alt={selectedProperty.title}
-                  width={400}
-                  height={250}
-                  className="object-cover w-full h-48"
-                  data-ai-hint="modern house"
+       <div className="grid grid-cols-12 h-full pt-24">
+         <div className="col-span-4 lg:col-span-3 h-full overflow-y-auto pr-2">
+            <PropertyList 
+              properties={filteredProperties}
+              onCardClick={handleCardClick}
+              onCardHover={handleMarkerHover}
+              selectedPropertyId={selectedPropertyId}
+              hoveredPropertyId={hoveredPropertyId}
+            />
+         </div>
+         <div className="col-span-8 lg:col-span-9 h-full rounded-lg overflow-hidden">
+            {apiKey ? (
+                <PropertyMap
+                properties={filteredProperties}
+                apiKey={apiKey}
+                onMarkerClick={handleMarkerClick}
+                onMarkerHover={handleMarkerHover}
+                selectedPropertyId={selectedPropertyId}
+                hoveredPropertyId={hoveredPropertyId}
                 />
-                <Badge className="absolute top-2 left-2 bg-green-500/80 text-white border-none">Tersedia</Badge>
-              </div>
-              <div className="flex p-2 gap-2">
-                {selectedProperty.images.slice(0, 3).map((img, index) => (
-                  <Image
-                    key={index}
-                    src={img}
-                    alt={`${selectedProperty.title} thumbnail ${index}`}
-                    width={100}
-                    height={75}
-                    className="object-cover w-full h-16 rounded-md"
-                    data-ai-hint="house interior"
-                  />
-                ))}
-              </div>
-            </CardHeader>
-            <CardContent className="p-4 space-y-2">
-              <h3 className="text-xl font-bold">{selectedProperty.title}</h3>
-              <p className="text-sm text-muted-foreground">{selectedProperty.type} | LB: {selectedProperty.buildingArea} m² | LT: {selectedProperty.landArea} m² {selectedProperty.beds > 0 ? `| ${selectedProperty.beds} KT` : ''} {selectedProperty.baths > 0 ? `| ${selectedProperty.baths} KM` : ''}</p>
-              <p className="text-sm line-clamp-3">{selectedProperty.description}</p>
-            </CardContent>
-          </Card>
-          <Card className="shadow-2xl">
-            <CardContent className="p-3 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="agent portrait" />
-                  <AvatarFallback>LR</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-semibold">Bapak Propertio</p>
-                  <p className="text-sm text-muted-foreground">Kontributor</p>
+            ) : (
+                <div className="w-full h-full flex items-center justify-center bg-muted">
+                <p className="text-center text-destructive p-4">
+                    Google Maps API key is missing.
+                    Please add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to your environment variables.
+                </p>
                 </div>
-              </div>
-              <Button onClick={() => router.push(`/properties/${selectedProperty.id}`)}>Lihat Detail</Button>
-            </CardContent>
-          </Card>
+            )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
-
-    

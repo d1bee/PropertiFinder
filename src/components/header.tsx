@@ -37,7 +37,7 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
   return (
     <header className={cn(
         "sticky top-0 z-50 shadow-sm",
-        isPropertiesPage ? "bg-transparent absolute w-full top-4" : "bg-card border-b"
+        isPropertiesPage ? "bg-transparent absolute w-full top-0 bg-gradient-to-b from-black/50 to-transparent" : "bg-card border-b"
     )}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {!isPropertiesPage ? (
@@ -59,10 +59,10 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
             </div>
           </div>
         ) : (
-          <div className={cn("h-20 flex flex-col justify-center", isPropertiesPage && !isDetailPage && "bg-card rounded-xl shadow-lg border p-4 h-auto")}>
+          <div className={cn("flex flex-col justify-center p-4 h-auto")}>
              <div className="flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-2">
-                    <Image src="/logo.png" alt="DATA BATAM Logo" width={140} height={40} />
+                    <Image src="/logo.png" alt="DATA BATAM Logo" width={140} height={40} className="invert brightness-0" />
                 </Link>
                 <div className="flex-grow">
                     {isDetailPage && property ? (
@@ -85,10 +85,10 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
                     )}
                  </div>
                  <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white">
                         <Heart className="h-5 w-5" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white">
                         <User className="h-5 w-5" />
                     </Button>
                 </div>

@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Building, Home, LandPlot, Search } from 'lucide-react';
+import { Building, Home, LandPlot, Search, ChevronDown } from 'lucide-react';
 import { Input } from './ui/input';
 
 export type FilterState = {
@@ -31,7 +31,19 @@ const priceSortOptions = ['Default', 'Harga Terendah', 'Harga Tertinggi'];
 const areaRanges = ['Semua', '0-100', '101-200', '201-500', '501-1000', '1000+'];
 
 export function PropertySearchFilter({ filters, onFilterChange }: PropertySearchFilterProps) {
-  const getDropdownLabel = (value: string, defaultValue: string) => value === 'Semua' || value === 'Default' ? defaultValue : value;
+  const getDropdownLabel = (value: string, defaultValue: string) => {
+    if (value === 'Semua' || value === 'Default' || !value) {
+      return defaultValue;
+    }
+    if (value.includes('+')) {
+      return `> ${value.replace('+', '')} m²`;
+    }
+     if (value.includes('-')) {
+      return `${value} m²`;
+    }
+    return value;
+  };
+
 
   return (
     <div className="flex items-center gap-2 justify-center w-full">
@@ -40,7 +52,7 @@ export function PropertySearchFilter({ filters, onFilterChange }: PropertySearch
         <Input
           id="search"
           placeholder="Cari berdasarkan lokasi, judul..."
-          className="pl-10 h-10 rounded-full w-full bg-background"
+          className="pl-10 h-10 rounded-full w-full bg-white/90"
           value={filters.searchTerm}
           onChange={(e) => onFilterChange({ searchTerm: e.target.value })}
         />
@@ -48,9 +60,9 @@ export function PropertySearchFilter({ filters, onFilterChange }: PropertySearch
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full text-muted-foreground">
-            <Building className="mr-2 h-4 w-4" />
+          <Button variant="outline" className="rounded-full bg-white/90">
             {getDropdownLabel(filters.propertyType, 'Tipe Properti')}
+            <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
@@ -66,9 +78,9 @@ export function PropertySearchFilter({ filters, onFilterChange }: PropertySearch
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full text-muted-foreground">
-            <Home className="mr-2 h-4 w-4" />
-            {getDropdownLabel(filters.priceSort, 'Harga')}
+          <Button variant="outline" className="rounded-full bg-white/90">
+             {getDropdownLabel(filters.priceSort, 'Harga')}
+            <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
@@ -84,9 +96,9 @@ export function PropertySearchFilter({ filters, onFilterChange }: PropertySearch
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full text-muted-foreground">
-            <Home className="mr-2 h-4 w-4" />
-            {getDropdownLabel(filters.buildingArea, 'Luas Bangunan')}
+          <Button variant="outline" className="rounded-full bg-white/90">
+             {getDropdownLabel(filters.buildingArea, 'Luas Bangunan')}
+            <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
@@ -102,9 +114,9 @@ export function PropertySearchFilter({ filters, onFilterChange }: PropertySearch
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="rounded-full text-muted-foreground">
-            <LandPlot className="mr-2 h-4 w-4" />
-            {getDropdownLabel(filters.landArea, 'Luas Tanah')}
+          <Button variant="outline" className="rounded-full bg-white/90">
+             {getDropdownLabel(filters.landArea, 'Luas Tanah')}
+            <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
@@ -120,5 +132,3 @@ export function PropertySearchFilter({ filters, onFilterChange }: PropertySearch
     </div>
   );
 }
-
-    
