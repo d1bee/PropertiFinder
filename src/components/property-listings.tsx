@@ -168,10 +168,10 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
         }}
         onAddPropertyClick={() => setIsAddDrawerOpen(true)}
       />
-      <main className="flex-grow pt-20 md:pt-24 flex flex-col">
+      <main className="flex-grow pt-32 flex flex-col">
         <div className="flex-grow relative">
           <div className={viewMode === 'list' ? 'block' : 'hidden'}>
-             <ScrollArea className="h-[calc(100vh-theme(spacing.24))]">
+             <ScrollArea className="h-[calc(100vh-theme(spacing.32))]">
                 <div className="container mx-auto px-4 py-4">
                   {filteredProperties.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
