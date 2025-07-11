@@ -1,4 +1,3 @@
-'use server';
 
 export type Property = {
   id: string;
@@ -803,5 +802,3 @@ export const properties: Property[] = [
     coordinates: { lat: 1.114, lng: 104.075 },
   },
 ];
-
-    
