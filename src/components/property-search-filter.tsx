@@ -8,61 +8,31 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Filter, Search } from 'lucide-react';
+import { Bed, Building, Home, MapPin, Search } from 'lucide-react';
 import { Input } from './ui/input';
 
 export function PropertySearchFilter() {
   return (
-    <div className="py-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-2 items-center bg-card rounded-lg p-2">
-        <div className="lg:col-span-2 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input id="location" placeholder="New York" className="pl-10 h-12" />
+    <div className="flex items-center gap-2">
+       <Button variant="secondary" className="rounded-full">
+            <Home className="mr-2 h-4 w-4" />
+            Distance 2-5 miles
+        </Button>
+       <Button variant="secondary" className="rounded-full">
+            <Bed className="mr-2 h-4 w-4" />
+            Apartments
+        </Button>
+        <Button variant="outline" className="rounded-full text-muted-foreground">
+            <Building className="mr-2 h-4 w-4" />
+            Property Type
+        </Button>
+         <Button variant="outline" className="rounded-full text-muted-foreground">
+            SQ.FT
+        </Button>
+        <div className="relative ml-auto">
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input id="location" placeholder="Lincoln Center for the Performing Arts" className="pl-10 h-12 rounded-full w-80" />
         </div>
-        <div>
-          <Select>
-            <SelectTrigger className="h-12">
-              <SelectValue placeholder="Property Type: All" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="rumah">Rumah</SelectItem>
-              <SelectItem value="apartemen">Apartemen</SelectItem>
-              <SelectItem value="tanah">Tanah</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Select>
-            <SelectTrigger className="h-12">
-              <SelectValue placeholder="$2K - $10K" />
-            </SelectTrigger>
-            <SelectContent>
-               <SelectItem value="range1">$2K - $10K</SelectItem>
-               <SelectItem value="range2">$10K - $20K</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Select>
-            <SelectTrigger className="h-12">
-              <SelectValue placeholder="3 Bedrooms" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">1 Bedroom</SelectItem>
-              <SelectItem value="2">2 Bedrooms</SelectItem>
-              <SelectItem value="3">3 Bedrooms</SelectItem>
-              <SelectItem value="4+">4+ Bedrooms</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Button variant="outline" className="w-full h-12">
-            <Filter className="mr-2 h-4 w-4" />
-            Filters
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

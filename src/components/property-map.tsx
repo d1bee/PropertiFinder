@@ -1,56 +1,86 @@
 'use client';
 
-import { useState } from 'react';
 import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 import type { Property } from '@/lib/data';
+import { cn } from '@/lib/utils';
 
 type PropertyMapProps = {
   properties: Property[];
   apiKey: string;
   onMarkerClick: (property: Property) => void;
+  selectedPropertyId?: string | null;
 };
 
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-    notation: 'compact',
-  }).format(price / 16000); // Approximate conversion
-};
-
-export function PropertyMap({ properties, apiKey, onMarkerClick }: PropertyMapProps) {
-  const [infoWindow, setInfoWindow] = useState<{ property: Property } | null>(null);
-
+export function PropertyMap({ properties, apiKey, onMarkerClick, selectedPropertyId }: PropertyMapProps) {
   const center = { lat: 1.0827, lng: 104.0304 }; // Batam, Indonesia
 
-  const handleMarkerClick = (property: Property) => {
-    setInfoWindow({ property });
-    onMarkerClick(property);
-  };
-  
   return (
-    <div className="w-full h-full rounded-lg overflow-hidden">
+    <div className="w-full h-full">
         <APIProvider apiKey={apiKey}>
             <Map
                 defaultCenter={center}
-                defaultZoom={12}
-                mapId="PROPERTI_FINDER_MAP_NEW"
+                defaultZoom={11}
+                mapId="PROPERTI_FINDER_MAP_NEW_2"
                 gestureHandling={'greedy'}
                 disableDefaultUI={true}
                 className="w-full h-full"
+                options={{
+                    styles: [
+                        {
+                            "featureType": "poi",
+                            "stylers": [
+                                { "visibility": "off" }
+                            ]
+                        },
+                        {
+                            "featureType": "transit",
+                            "stylers": [
+                                { "visibility": "off" }
+                            ]
+                        },
+                         {
+                            "featureType": "road",
+                            "elementType": "labels.icon",
+                            "stylers": [
+                                { "visibility": "off" }
+                            ]
+                        },
+                        {
+                            "featureType": "road.highway",
+                            "elementType": "geometry",
+                            "stylers": [
+                                { "color": "#ffffff" }
+                            ]
+                        },
+                        {
+                            "featureType": "landscape",
+                            "elementType": "geometry",
+                            "stylers": [
+                                { "color": "#f5f5f5" }
+                            ]
+                        },
+                         {
+                            "featureType": "water",
+                            "elementType": "geometry",
+                            "stylers": [
+                                { "color": "#d4e4f2" }
+                            ]
+                        }
+                    ]
+                }}
             >
                 {properties.map((property) => (
-                <AdvancedMarker
-                    key={property.id}
-                    position={property.coordinates}
-                    onClick={() => handleMarkerClick(property)}
-                >
-                    <div className="px-2 py-1 bg-card text-card-foreground rounded-full shadow-md text-sm font-semibold border hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
-                    {formatPrice(property.price)}
-                    </div>
-                </AdvancedMarker>
+                    <AdvancedMarker
+                        key={property.id}
+                        position={property.coordinates}
+                        onClick={() => onMarkerClick(property)}
+                    >
+                        <div className={cn(
+                            "w-4 h-4 rounded-full border-2 border-white shadow-md",
+                            selectedPropertyId === property.id ? "bg-pink-500 scale-125" : "bg-blue-500",
+                            "transition-all"
+                        )}/>
+                    </AdvancedMarker>
                 ))}
             </Map>
         </APIProvider>
