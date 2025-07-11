@@ -148,10 +148,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       if (y < headerHeight + PADDING) {
         y = headerHeight + PADDING;
       }
-      
 
       setCardPosition({ x, y });
-
     } else {
       setCardPosition(null); 
     }
@@ -208,11 +206,11 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
             onAddPropertyClick={() => handleAddDrawerOpen(true)}
           />
        </div>
-      <main className="flex-grow flex flex-col mt-20">
+      <main className="flex-grow flex flex-col">
         <div className="flex-grow relative">
           <div className={viewMode === 'list' ? 'block' : 'hidden'}>
              <ScrollArea className="h-full">
-                <div className="container mx-auto px-4 pt-8 pb-4">
+                <div className="container mx-auto px-4 pt-24 pb-4">
                   {filteredProperties.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                       {filteredProperties.map(property => (
@@ -246,6 +244,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               onMapClick={handleMapClick}
               onMapRightClick={handleMapRightClick}
               hoveredPropertyId={hoveredPropertyId}
+              selectedPropertyIds={selectedPropertyIds}
             />
              {selectedPropertyForCard && (
                <Draggable nodeRef={draggableRef} handle=".drag-handle" bounds="parent" position={cardPosition ? { x: 0, y: 0 } : undefined}>
