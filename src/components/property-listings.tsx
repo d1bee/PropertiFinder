@@ -33,6 +33,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [selectedPropertyForCard, setSelectedPropertyForCard] = useState<Property | null>(null);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+
 
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
@@ -55,6 +57,11 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       }
     }
   }, [selectedPropertyIds, viewMode]);
+  
+  // Reset selection mode when switching views
+  useEffect(() => {
+    setIsSelectionMode(false);
+  }, [viewMode]);
 
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
@@ -106,12 +113,19 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   }, []);
 
   const handleMarkerClick = useCallback((property: Property) => {
-    togglePropertySelection(property.id);
-  }, [togglePropertySelection]);
+    if (isSelectionMode) {
+      togglePropertySelection(property.id);
+    } else {
+      setSelectedPropertyForCard(property);
+      setSelectedPropertyIds([]);
+    }
+  }, [isSelectionMode, togglePropertySelection]);
 
   const handleMapClick = useCallback(() => {
-    setSelectedPropertyForCard(null);
-  }, []);
+    if (!isSelectionMode) {
+        setSelectedPropertyForCard(null);
+    }
+  }, [isSelectionMode]);
   
   const handleCompareClick = () => {
     if (selectedPropertyIds.length > 0) {
@@ -130,6 +144,15 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       };
       setProperties(prev => [...prev, newProperty]);
       setIsAddDrawerOpen(false);
+  };
+
+  const handleToggleSelectionMode = () => {
+    setIsSelectionMode(prev => !prev);
+    setSelectedPropertyForCard(null); // Close any open card when toggling mode
+    if (isSelectionMode) {
+      // Clear selections when exiting selection mode
+      setSelectedPropertyIds([]);
+    }
   };
   
   return (
@@ -183,6 +206,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               onMapClick={handleMapClick}
               selectedPropertyIds={selectedPropertyIds}
               hoveredPropertyId={hoveredPropertyId}
+              isSelectionMode={isSelectionMode}
+              onToggleSelectionMode={handleToggleSelectionMode}
             />
              {selectedPropertyForCard && (
                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-sm px-4">
