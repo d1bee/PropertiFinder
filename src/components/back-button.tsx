@@ -19,20 +19,10 @@ function BackButtonComponent() {
     }
   };
 
-  const getButtonText = () => {
-    if (from === 'map') {
-      return 'Kembali ke Peta';
-    }
-    if (from === 'list') {
-      return 'Kembali ke Daftar';
-    }
-    return 'Kembali ke hasil';
-  };
-
   return (
     <Button variant="outline" onClick={handleClick} className="mb-4">
       <ChevronLeft className="h-4 w-4 mr-2" />
-      {getButtonText()}
+      Kembali
     </Button>
   );
 }
