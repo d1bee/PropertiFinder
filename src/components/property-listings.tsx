@@ -44,13 +44,13 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
-    if (selectedPropertyId && cardRefs.current[selectedPropertyId]) {
+    if (selectedPropertyId && viewMode === 'list' && cardRefs.current[selectedPropertyId]) {
       cardRefs.current[selectedPropertyId]?.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',
       });
     }
-  }, [selectedPropertyId]);
+  }, [selectedPropertyId, viewMode]);
 
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
@@ -82,6 +82,11 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       return searchTermMatch && propertyTypeMatch && buildingAreaMatch && landAreaMatch;
     });
   }, [properties, filters]);
+
+  const selectedProperty = useMemo(() => {
+    if (!selectedPropertyId) return null;
+    return filteredProperties.find(p => p.id === selectedPropertyId);
+  }, [selectedPropertyId, filteredProperties]);
   
   const handleCardClick = useCallback((property: Property) => {
      router.push(`/properties/${property.id}`);
@@ -128,7 +133,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
         onAddPropertyClick={() => setIsAddDrawerOpen(true)}
       />
       <main className="flex-grow pt-20 md:pt-24 flex flex-col">
-        <div className="flex-grow">
+        <div className="flex-grow relative">
           {viewMode === 'list' && (
              <ScrollArea className="h-full">
                 <div className="container mx-auto px-4 py-4">
@@ -154,15 +159,25 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
                 </div>
               </ScrollArea>
           )}
-          {viewMode === 'map' && (
-             <div className="h-full w-full">
-              <PropertyMap
-                properties={filteredProperties}
-                apiKey={apiKey}
-                onMarkerClick={handleMarkerClick}
-                onMapClick={handleMapClick}
-                selectedPropertyId={selectedPropertyId}
-                hoveredPropertyId={hoveredPropertyId}
+          
+          <div className="h-full w-full">
+            <PropertyMap
+              properties={filteredProperties}
+              apiKey={apiKey}
+              onMarkerClick={handleMarkerClick}
+              onMapClick={handleMapClick}
+              selectedPropertyId={selectedPropertyId}
+              hoveredPropertyId={hoveredPropertyId}
+              className={viewMode === 'list' ? 'hidden' : ''}
+            />
+          </div>
+
+          {viewMode === 'map' && selectedProperty && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-10">
+              <PropertyCard 
+                property={selectedProperty} 
+                isFloating 
+                onClose={() => setSelectedPropertyId(null)}
               />
             </div>
           )}

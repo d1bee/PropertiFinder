@@ -1,7 +1,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { BedDouble, Bath, Heart, LandPlot, Building } from 'lucide-react';
+import { BedDouble, Bath, Heart, LandPlot, Building, X } from 'lucide-react';
 import type { Property } from '@/lib/data';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
@@ -10,9 +10,12 @@ import { Badge } from './ui/badge';
 type PropertyCardProps = {
   property: Property;
   selected?: boolean;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
-  onClick: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  onClick?: () => void;
+  className?: string;
+  isFloating?: boolean;
+  onClose?: () => void;
 };
 
 const formatPrice = (price: number) => {
@@ -37,40 +40,49 @@ const getAIHint = (type: Property['type']) => {
   }
 }
 
-export function PropertyCard({ property, selected = false, onMouseEnter, onMouseLeave, onClick }: PropertyCardProps) {
+export function PropertyCard({ 
+  property, 
+  selected = false, 
+  onMouseEnter, 
+  onMouseLeave, 
+  onClick, 
+  className,
+  isFloating = false,
+  onClose
+}: PropertyCardProps) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // Prevent the Link from navigating when the card itself is clicked
     // as the parent component might handle the navigation logic.
-    const target = e.target as HTMLElement;
-    if (!target.closest('a')) {
-      e.preventDefault();
-      onClick();
+    if (onClick) {
+      const target = e.target as HTMLElement;
+      if (!target.closest('a') && !target.closest('button')) {
+        e.preventDefault();
+        onClick();
+      }
     }
   };
 
-
-  return (
-    <div 
-      className={cn(
-        "bg-card rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer flex flex-col h-full", 
-        selected ? "shadow-2xl border-primary ring-2 ring-primary" : "hover:shadow-md hover:border-muted-foreground/50"
-      )}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      onClick={handleClick}
-    >
-      <div className="relative">
+  const content = (
+    <>
+       <div className="relative">
           <Image
             src={property.images[0]}
             alt={property.title}
             width={400}
             height={250}
-            className="object-cover w-full h-40"
+            className={cn("object-cover w-full", isFloating ? "h-32" : "h-40")}
             data-ai-hint={getAIHint(property.type)}
           />
-        <Button size="icon" variant="secondary" className="absolute top-2 right-2 rounded-full h-7 w-7 bg-card/70 hover:bg-card">
-            <Heart className="h-4 w-4" />
-        </Button>
+        {!isFloating && (
+          <Button size="icon" variant="secondary" className="absolute top-2 right-2 rounded-full h-7 w-7 bg-card/70 hover:bg-card">
+              <Heart className="h-4 w-4" />
+          </Button>
+        )}
+        {isFloating && onClose && (
+           <Button size="icon" variant="secondary" className="absolute top-2 right-2 rounded-full h-7 w-7 bg-card/70 hover:bg-card" onClick={onClose}>
+              <X className="h-4 w-4" />
+          </Button>
+        )}
          <Badge className="absolute bottom-2 left-2">{property.type}</Badge>
       </div>
       <div className="p-3 flex flex-col flex-grow">
@@ -112,8 +124,23 @@ export function PropertyCard({ property, selected = false, onMouseEnter, onMouse
             )}
         </div>
       </div>
+    </>
+  );
+
+  return (
+    <div 
+      className={cn(
+        "bg-card rounded-lg overflow-hidden border transition-all duration-300 flex flex-col", 
+        !isFloating && "cursor-pointer h-full",
+        selected && !isFloating ? "shadow-2xl border-primary ring-2 ring-primary" : "hover:shadow-md hover:border-muted-foreground/50",
+        isFloating && "shadow-2xl w-full",
+        className
+      )}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onClick={isFloating ? undefined : handleClick}
+    >
+      {content}
     </div>
   );
 }
-
-    

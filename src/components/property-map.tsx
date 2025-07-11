@@ -4,6 +4,7 @@
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
 import { PropertyMarkers } from './property-markers';
 import type { Property } from '@/lib/data';
+import { cn } from '@/lib/utils';
 
 interface PropertyMapProps {
   properties: Property[];
@@ -12,6 +13,7 @@ interface PropertyMapProps {
   onMapClick: (e: google.maps.MapMouseEvent) => void;
   selectedPropertyId?: string | null;
   hoveredPropertyId?: string | null;
+  className?: string;
 }
 
 export function PropertyMap({
@@ -21,6 +23,7 @@ export function PropertyMap({
   onMapClick,
   selectedPropertyId,
   hoveredPropertyId,
+  className
 }: PropertyMapProps) {
   const defaultCenter = { lat: 1.118, lng: 104.048 };
 
@@ -36,7 +39,7 @@ export function PropertyMap({
   }
 
   return (
-    <div className="w-full h-full">
+    <div className={cn("w-full h-full", className)}>
       <APIProvider apiKey={apiKey}>
         <Map
           defaultCenter={defaultCenter}
