@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
@@ -29,7 +30,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const [properties, setProperties] = useState<Property[]>(initialPropertiesData);
   const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
 
   const [filters, setFilters] = useState<FilterState>({
@@ -92,10 +93,10 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
 
   const handleMarkerClick = useCallback((propertyId: string) => {
     setSelectedPropertyId(propertyId);
-     if (cardRefs.current[propertyId]) {
+     if (viewMode === 'list' && cardRefs.current[propertyId]) {
       cardRefs.current[propertyId]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, []);
+  }, [viewMode]);
 
   const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     setSelectedPropertyId(null);
@@ -126,14 +127,13 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
         onViewModeChange={setViewMode}
         onAddPropertyClick={() => setIsAddDrawerOpen(true)}
       />
-      <main className="flex-grow pt-20 md:pt-24 flex flex-col md:flex-row">
-        {/* Mobile View */}
-        <div className="md:hidden flex-grow">
+      <main className="flex-grow pt-20 md:pt-24 flex flex-col">
+        <div className="flex-grow">
           {viewMode === 'list' && (
              <ScrollArea className="h-full">
                 <div className="container mx-auto px-4 py-4">
                   {filteredProperties.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                       {filteredProperties.map(property => (
                          <div key={property.id} ref={el => (cardRefs.current[property.id] = el)}>
                             <PropertyCard
@@ -167,31 +167,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
             </div>
           )}
         </div>
-
-        {/* Desktop View */}
-        <div className="hidden md:flex flex-grow">
-            <div className="w-[420px] lg:w-[480px] xl:w-[540px] h-full flex-shrink-0 bg-card">
-              <PropertyList 
-                  properties={filteredProperties}
-                  onCardClick={handleCardClick}
-                  onCardHover={handleCardHover}
-                  selectedPropertyId={selectedPropertyId}
-                  hoveredPropertyId={hoveredPropertyId}
-                  cardRefs={cardRefs}
-              />
-            </div>
-            <div className="flex-grow h-full">
-              <PropertyMap
-                properties={filteredProperties}
-                apiKey={apiKey}
-                onMarkerClick={handleMarkerClick}
-                onMapClick={handleMapClick}
-                selectedPropertyId={selectedPropertyId}
-                hoveredPropertyId={hoveredPropertyId}
-              />
-            </div>
-        </div>
-
       </main>
        <Drawer open={isAddDrawerOpen} onOpenChange={setIsAddDrawerOpen}>
         <DrawerContent>
