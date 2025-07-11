@@ -13,7 +13,7 @@ function BackButtonComponent() {
 
   const handleClick = () => {
     if (from === 'map' || from === 'list') {
-      router.push('/properties');
+      router.push(`/properties?view=${from}`);
     } else {
       router.back();
     }

@@ -1,8 +1,8 @@
 
 'use client';
 
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useMemo, useCallback, useRef, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { type Property } from '@/lib/data';
 import { PropertyMap } from '@/components/property-map';
 import { Header } from './header';
@@ -26,12 +26,22 @@ const parseAreaRange = (range: string): [number, number] => {
   return [min, max];
 };
 
-export function PropertyListings({ apiKey, properties: initialPropertiesData }: PropertyListingsProps) {
+function PropertyListingsComponent({ apiKey, properties: initialPropertiesData }: PropertyListingsProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [properties, setProperties] = useState<Property[]>(initialPropertiesData);
   const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
   const [selectedPropertyIds, setSelectedPropertyIds] = useState<string[]>([]);
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
+
+  const viewMode = searchParams.get('view') === 'list' ? 'list' : 'map';
+
+  const setViewMode = (mode: 'list' | 'map') => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('view', mode);
+    router.push(`/properties?${params.toString()}`);
+  };
+  
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [selectedPropertyForCard, setSelectedPropertyForCard] = useState<Property | null>(null);
   const [newPropertyCoords, setNewPropertyCoords] = useState<{lat: number; lng: number} | null>(null);
@@ -194,36 +204,21 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   return (
     <div className="relative w-full h-full flex flex-col">
        <div ref={headerRef} className="w-full">
-         {viewMode === 'map' && (
-           <Header 
-              filters={filters} 
-              onFilterChange={handleFilterChange} 
-              showFilters={true} 
-              viewMode={viewMode}
-              onViewModeChange={(mode) => {
-                setViewMode(mode);
-                setSelectedPropertyForCard(null);
-              }}
-              onAddPropertyClick={() => handleAddDrawerOpen(true)}
-            />
-          )}
+         <Header 
+            filters={filters} 
+            onFilterChange={handleFilterChange} 
+            showFilters={true} 
+            viewMode={viewMode}
+            onViewModeChange={(mode) => {
+              setViewMode(mode);
+              setSelectedPropertyForCard(null);
+            }}
+            onAddPropertyClick={() => handleAddDrawerOpen(true)}
+          />
        </div>
       <main className="flex-grow flex flex-col">
         <div className="flex-grow relative">
           <div className={viewMode === 'list' ? 'block' : 'hidden'}>
-             <div className="sticky top-0 z-10">
-                <Header 
-                  filters={filters} 
-                  onFilterChange={handleFilterChange} 
-                  showFilters={true} 
-                  viewMode={viewMode}
-                  onViewModeChange={(mode) => {
-                    setViewMode(mode);
-                    setSelectedPropertyForCard(null);
-                  }}
-                  onAddPropertyClick={() => handleAddDrawerOpen(true)}
-                />
-             </div>
              <ScrollArea className="h-full">
                 <div className="container mx-auto px-4 py-4">
                   {filteredProperties.length > 0 ? (
@@ -235,6 +230,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
                               selected={selectedPropertyIds.includes(property.id)}
                               onSelectionChange={() => togglePropertySelection(property.id)}
                               showCheckbox
+                              viewMode='list'
                               onMouseEnter={() => handleCardHover(property.id)}
                               onMouseLeave={() => handleCardHover(null)}
                               onClick={() => handleCardClick(property)}
@@ -274,6 +270,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
                     onClose={() => setSelectedPropertyForCard(null)} 
                     onClick={() => handleCardClick(selectedPropertyForCard)}
                     isDraggable
+                    viewMode='map'
                     />
                 </div>
                </Draggable>
@@ -311,4 +308,12 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       </Drawer>
     </div>
   );
+}
+
+export function PropertyListings(props: PropertyListingsProps) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PropertyListingsComponent {...props} />
+    </Suspense>
+  )
 }
