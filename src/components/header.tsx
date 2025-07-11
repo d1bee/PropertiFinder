@@ -8,7 +8,6 @@ import { Button } from './ui/button';
 import { PropertySearchFilter, type FilterState } from './property-search-filter';
 import { Badge } from './ui/badge';
 import { properties } from '@/lib/data';
-import Image from 'next/image';
 
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('id-ID', {
@@ -44,7 +43,7 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center gap-8">
               <Link href="/" className="flex items-center gap-2">
-                 <Image src="/logo.png" alt="DATA BATAM Logo" width={140} height={40} />
+                 <h1 className="text-xl font-bold">Properti Finder</h1>
               </Link>
             </div>
             <div className="flex items-center gap-2">
@@ -62,7 +61,7 @@ export function Header({ filters, onFilterChange, showFilters = false }: HeaderP
           <div className={cn("flex flex-col justify-center p-4 h-auto")}>
              <div className="flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-2">
-                    <Image src="/logo.png" alt="DATA BATAM Logo" width={140} height={40} className="invert brightness-0" />
+                    <h1 className="text-xl font-bold text-white">Properti Finder</h1>
                 </Link>
                 <div className="flex-grow">
                     {isDetailPage && property ? (
