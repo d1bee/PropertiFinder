@@ -1,7 +1,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { BedDouble, Bath, Heart, LandPlot, Building, X } from 'lucide-react';
+import { BedDouble, Bath, Heart, LandPlot, Building, X, GripVertical } from 'lucide-react';
 import type { Property } from '@/lib/data';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
@@ -19,6 +19,7 @@ type PropertyCardProps = {
   isFloating?: boolean;
   onClose?: () => void;
   showCheckbox?: boolean;
+  isDraggable?: boolean;
 };
 
 const formatPrice = (price: number) => {
@@ -53,12 +54,13 @@ export function PropertyCard({
   className,
   isFloating = false,
   onClose,
-  showCheckbox = false
+  showCheckbox = false,
+  isDraggable = false
 }: PropertyCardProps) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (onClick) {
       const target = e.target as HTMLElement;
-      if (!target.closest('a') && !target.closest('button') && !target.closest('[role="checkbox"]')) {
+      if (!target.closest('a') && !target.closest('button') && !target.closest('[role="checkbox"]') && !target.closest('.drag-handle')) {
         e.preventDefault();
         onClick();
       }
@@ -98,13 +100,18 @@ export function PropertyCard({
          <Badge className="absolute bottom-2 left-2">{property.type}</Badge>
       </div>
       <div className="p-3 flex flex-col flex-grow">
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start gap-2">
             <div>
                 <h3 className="font-semibold text-base leading-tight truncate" title={property.title}>
                     <Link href={`/properties/${property.id}`} className="hover:underline" onClick={(e) => e.stopPropagation()}>{property.title}</Link>
                 </h3>
                 <p className="text-muted-foreground text-xs">{property.location}</p>
             </div>
+            {isDraggable && (
+                <div className="drag-handle cursor-move p-1 text-muted-foreground hover:text-foreground">
+                    <GripVertical className="h-5 w-5" />
+                </div>
+            )}
         </div>
         
         <p className="text-lg font-bold mt-2">{formatPrice(property.price)}</p>

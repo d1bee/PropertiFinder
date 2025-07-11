@@ -12,6 +12,7 @@ import { PropertyCard } from './property-card';
 import { AddPropertyForm } from './add-property-form';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from './ui/drawer';
 import { Button } from './ui/button';
+import Draggable from 'react-draggable';
 
 interface PropertyListingsProps {
   apiKey?: string;
@@ -210,14 +211,17 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               onToggleSelectionMode={handleToggleSelectionMode}
             />
              {selectedPropertyForCard && (
-               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-sm px-4">
-                <PropertyCard 
-                  property={selectedPropertyForCard} 
-                  isFloating 
-                  onClose={() => setSelectedPropertyForCard(null)} 
-                  onClick={() => handleCardClick(selectedPropertyForCard)}
-                />
-              </div>
+               <Draggable handle=".drag-handle" bounds="parent">
+                <div className="absolute bottom-4 left-4 z-10 w-full max-w-sm cursor-grab">
+                    <PropertyCard 
+                    property={selectedPropertyForCard} 
+                    isFloating 
+                    onClose={() => setSelectedPropertyForCard(null)} 
+                    onClick={() => handleCardClick(selectedPropertyForCard)}
+                    isDraggable
+                    />
+                </div>
+               </Draggable>
             )}
           </div>
 
