@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
@@ -15,6 +14,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } f
 
 interface PropertyListingsProps {
   apiKey?: string;
+  properties: Property[];
 }
 
 const parseAreaRange = (range: string): [number, number] => {
@@ -24,12 +24,12 @@ const parseAreaRange = (range: string): [number, number] => {
   return [min, max];
 };
 
-export function PropertyListings({ apiKey }: PropertyListingsProps) {
+export function PropertyListings({ apiKey, properties: initialPropertiesData }: PropertyListingsProps) {
   const router = useRouter();
-  const [properties, setProperties] = useState<Property[]>(initialProperties);
+  const [properties, setProperties] = useState<Property[]>(initialPropertiesData);
   const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
 
   const [filters, setFilters] = useState<FilterState>({
@@ -92,10 +92,10 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
 
   const handleMarkerClick = useCallback((propertyId: string) => {
     setSelectedPropertyId(propertyId);
-     if (viewMode === 'list' && cardRefs.current[propertyId]) {
+     if (cardRefs.current[propertyId]) {
       cardRefs.current[propertyId]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [viewMode]);
+  }, []);
 
   const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     setSelectedPropertyId(null);
@@ -126,10 +126,36 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
         onViewModeChange={setViewMode}
         onAddPropertyClick={() => setIsAddDrawerOpen(true)}
       />
-      <div className="flex-grow pt-24">
-        {viewMode === 'map' ? (
-          <div className="relative w-full h-full">
-            <div className="absolute top-0 left-0 h-full w-full z-0">
+      <main className="flex-grow pt-20 md:pt-24 flex flex-col md:flex-row">
+        {/* Mobile View */}
+        <div className="md:hidden flex-grow">
+          {viewMode === 'list' && (
+             <ScrollArea className="h-full">
+                <div className="container mx-auto px-4 py-4">
+                  {filteredProperties.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {filteredProperties.map(property => (
+                         <div key={property.id} ref={el => (cardRefs.current[property.id] = el)}>
+                            <PropertyCard
+                            property={property}
+                            selected={property.id === selectedPropertyId || property.id === hoveredPropertyId}
+                            onMouseEnter={() => handleCardHover(property.id)}
+                            onMouseLeave={() => handleCardHover(null)}
+                            onClick={() => handleCardClick(property)}
+                            />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center h-[50vh]">
+                      <p className="text-muted-foreground text-lg text-center">Tidak ada properti yang cocok dengan kriteria Anda.</p>
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+          )}
+          {viewMode === 'map' && (
+             <div className="h-full w-full">
               <PropertyMap
                 properties={filteredProperties}
                 apiKey={apiKey}
@@ -139,45 +165,34 @@ export function PropertyListings({ apiKey }: PropertyListingsProps) {
                 hoveredPropertyId={hoveredPropertyId}
               />
             </div>
-            {filteredProperties.length > 0 && (
-              <div className="absolute top-4 left-4 z-10 w-[380px] h-[calc(100%-2rem)] bg-card rounded-lg shadow-lg overflow-hidden">
-                <PropertyList 
+          )}
+        </div>
+
+        {/* Desktop View */}
+        <div className="hidden md:flex flex-grow">
+            <div className="w-[420px] lg:w-[480px] xl:w-[540px] h-full flex-shrink-0 bg-card">
+              <PropertyList 
                   properties={filteredProperties}
                   onCardClick={handleCardClick}
                   onCardHover={handleCardHover}
                   selectedPropertyId={selectedPropertyId}
                   hoveredPropertyId={hoveredPropertyId}
                   cardRefs={cardRefs}
-                />
-              </div>
-            )}
-          </div>
-        ) : (
-          <ScrollArea className="h-full">
-            <div className="container mx-auto px-4 py-4">
-              {filteredProperties.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  {filteredProperties.map(property => (
-                     <div key={property.id} ref={el => (cardRefs.current[property.id] = el)}>
-                        <PropertyCard
-                        property={property}
-                        selected={property.id === selectedPropertyId || property.id === hoveredPropertyId}
-                        onMouseEnter={() => handleCardHover(property.id)}
-                        onMouseLeave={() => handleCardHover(null)}
-                        onClick={() => handleCardClick(property)}
-                        />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex items-center justify-center h-[50vh]">
-                  <p className="text-muted-foreground text-lg">Tidak ada properti yang cocok dengan kriteria Anda.</p>
-                </div>
-              )}
+              />
             </div>
-          </ScrollArea>
-        )}
-      </div>
+            <div className="flex-grow h-full">
+              <PropertyMap
+                properties={filteredProperties}
+                apiKey={apiKey}
+                onMarkerClick={handleMarkerClick}
+                onMapClick={handleMapClick}
+                selectedPropertyId={selectedPropertyId}
+                hoveredPropertyId={hoveredPropertyId}
+              />
+            </div>
+        </div>
+
+      </main>
        <Drawer open={isAddDrawerOpen} onOpenChange={setIsAddDrawerOpen}>
         <DrawerContent>
            <DrawerHeader className="text-left">

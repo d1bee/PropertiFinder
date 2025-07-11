@@ -1,8 +1,7 @@
-
 'use client';
 
 import Link from 'next/link';
-import { Heart, User, ChevronLeft, Circle, Map, List, PlusCircle } from 'lucide-react';
+import { Heart, User, ChevronLeft, Circle, Map, List, PlusCircle, Filter } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -10,6 +9,7 @@ import { PropertySearchFilter, type FilterState } from './property-search-filter
 import { Badge } from './ui/badge';
 import { properties } from '@/lib/data';
 import Image from 'next/image';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('id-ID', {
@@ -51,48 +51,52 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
                  <h1 className="text-xl font-bold text-primary">Properti Batam dan Kepri</h1>
               </Link>
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" className="hidden sm:inline-flex bg-green-100 text-green-700 hover:bg-green-200">Bayar Sewa</Button>
-              <Button className="hidden sm:inline-flex bg-primary text-primary-foreground">Post Properti <span className="ml-2 bg-blue-400 text-white text-xs px-2 py-0.5 rounded-full">GRATIS</span></Button>
-              <Button variant="ghost" size="icon">
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Button variant="ghost" size="icon" className="sm:hidden">
                 <Heart className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon">
-                <User className="h-5 w-5" />
-              </Button>
+              <Button onClick={onAddPropertyClick} className="hidden sm:inline-flex bg-primary text-primary-foreground">Post Properti <span className="ml-2 bg-blue-400 text-white text-xs px-2 py-0.5 rounded-full">GRATIS</span></Button>
+              <div className="hidden sm:flex items-center gap-1">
+                 <Button variant="ghost" size="icon">
+                    <Heart className="h-5 w-5" />
+                </Button>
+                <Button variant="ghost" size="icon">
+                    <User className="h-5 w-5" />
+                </Button>
+              </div>
             </div>
           </div>
         ) : (
-          <div className={cn("flex flex-col justify-center p-4 h-auto")}>
-             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <Link href="/" className="flex items-center gap-2">
+          <div className={cn("flex flex-col justify-center p-2 sm:p-4 h-auto")}>
+             <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Link href="/" className="hidden sm:flex items-center gap-2">
                       <h1 className="text-xl font-bold text-white">Properti Batam dan Kepri</h1>
                   </Link>
                   {onViewModeChange && (
                     <div className="flex items-center gap-2 bg-black/20 p-1 rounded-full">
                       <Button 
                         size="sm"
-                        variant={viewMode === 'map' ? 'secondary': 'ghost'}
-                        onClick={() => onViewModeChange('map')}
-                        className={cn("rounded-full h-8 text-white", viewMode === 'map' ? 'text-primary-foreground' : 'hover:bg-white/20 hover:text-white')}
-                      >
-                        <Map className="h-4 w-4 mr-2"/>
-                        Peta
-                      </Button>
-                      <Button 
-                        size="sm"
                         variant={viewMode === 'list' ? 'secondary': 'ghost'}
                         onClick={() => onViewModeChange('list')}
                         className={cn("rounded-full h-8 text-white", viewMode === 'list' ? 'text-primary-foreground' : 'hover:bg-white/20 hover:text-white')}
                       >
-                         <List className="h-4 w-4 mr-2"/>
-                        Daftar
+                         <List className="h-4 w-4 sm:mr-2"/>
+                         <span className="hidden sm:inline">Daftar</span>
+                      </Button>
+                      <Button 
+                        size="sm"
+                        variant={viewMode === 'map' ? 'secondary': 'ghost'}
+                        onClick={() => onViewModeChange('map')}
+                        className={cn("rounded-full h-8 text-white", viewMode === 'map' ? 'text-primary-foreground' : 'hover:bg-white/20 hover:text-white')}
+                      >
+                        <Map className="h-4 w-4 sm:mr-2"/>
+                        <span className="hidden sm:inline">Peta</span>
                       </Button>
                     </div>
                   )}
                 </div>
-                <div className="flex-grow">
+                <div className="flex-grow hidden md:block">
                     {isDetailPage && property ? (
                     <div className="flex items-center gap-4">
                         <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={() => router.push('/properties')}>
@@ -113,16 +117,39 @@ export function Header({ filters, onFilterChange, showFilters = false, viewMode,
                     )}
                  </div>
                  <div className="flex items-center gap-2">
+                    <div className="md:hidden">
+                        {showFilters && filters && onFilterChange && (
+                             <Sheet>
+                                <SheetTrigger asChild>
+                                    <Button variant="outline" className="rounded-full bg-white/90">
+                                        <Filter className="mr-2 h-4 w-4"/>
+                                        Filter
+                                    </Button>
+                                </SheetTrigger>
+                                <SheetContent side="bottom" className="rounded-t-lg">
+                                    <SheetHeader>
+                                        <SheetTitle>Filter Properti</SheetTitle>
+                                        <SheetDescription>
+                                            Persempit pencarian Anda untuk menemukan properti yang sempurna.
+                                        </SheetDescription>
+                                    </SheetHeader>
+                                    <div className="p-4">
+                                         <PropertySearchFilter filters={filters} onFilterChange={onFilterChange} isMobile />
+                                    </div>
+                                </SheetContent>
+                            </Sheet>
+                        )}
+                    </div>
                     {onAddPropertyClick && (
-                      <Button onClick={onAddPropertyClick} variant="outline" className="rounded-full bg-white/90 text-primary hover:bg-white">
+                      <Button onClick={onAddPropertyClick} variant="outline" className="rounded-full bg-white/90 text-primary hover:bg-white hidden sm:flex">
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Tambah Properti
                       </Button>
                     )}
-                    <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white">
+                    <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white hidden sm:flex">
                         <Heart className="h-5 w-5" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white">
+                    <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white hidden sm:flex">
                         <User className="h-5 w-5" />
                     </Button>
                 </div>

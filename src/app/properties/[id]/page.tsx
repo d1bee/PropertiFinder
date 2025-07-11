@@ -40,7 +40,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
     <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
        <div className="mb-4">
         <BackButton />
-        <h1 className="text-3xl font-bold tracking-tight">{property.title}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{property.title}</h1>
         <div className="flex items-center text-muted-foreground mt-1">
           <MapPin className="h-4 w-4 mr-1.5" />
           {property.location}
@@ -49,7 +49,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <main className="lg:col-span-2 space-y-8">
-          <div className="grid grid-cols-2 grid-rows-2 gap-2 h-[500px]">
+          <div className="grid grid-cols-2 grid-rows-2 gap-2 h-[300px] md:h-[500px]">
             <div className="col-span-2 row-span-2">
               <Image
                 src={property.images[0]}
@@ -157,7 +157,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 <CardTitle>Harga Properti</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-4xl font-extrabold text-primary mb-4">{formatPrice(property.price)}</p>
+                <p className="text-3xl md:text-4xl font-extrabold text-primary mb-4">{formatPrice(property.price)}</p>
                 <Button className="w-full">Jadwalkan Kunjungan</Button>
               </CardContent>
             </Card>
@@ -205,5 +205,3 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
     </div>
   );
 }
-
-    

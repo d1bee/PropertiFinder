@@ -5,7 +5,7 @@ export default function PropertiesPage() {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
     return (
-        <div className="h-screen w-full relative">
+        <div className="h-screen w-full">
              <PropertyListings properties={properties} apiKey={apiKey} />
         </div>
     );
