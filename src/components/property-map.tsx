@@ -5,8 +5,6 @@ import { APIProvider, Map } from '@vis.gl/react-google-maps';
 import { PropertyMarkers } from './property-markers';
 import type { Property } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { Button } from './ui/button';
-import { Check, Hand } from 'lucide-react';
 
 interface PropertyMapProps {
   properties: Property[];
@@ -17,8 +15,6 @@ interface PropertyMapProps {
   selectedPropertyIds: string[];
   hoveredPropertyId?: string | null;
   className?: string;
-  isSelectionMode: boolean;
-  onToggleSelectionMode: () => void;
 }
 
 export function PropertyMap({
@@ -30,8 +26,6 @@ export function PropertyMap({
   selectedPropertyIds,
   hoveredPropertyId,
   className,
-  isSelectionMode,
-  onToggleSelectionMode,
 }: PropertyMapProps) {
   const defaultCenter = { lat: 1.118, lng: 104.048 };
 
@@ -66,14 +60,6 @@ export function PropertyMap({
           />
         </Map>
       </APIProvider>
-      <div className="absolute top-4 right-4 z-10">
-        <Button onClick={onToggleSelectionMode} variant={isSelectionMode ? "secondary" : "outline"} className="rounded-full shadow-lg bg-background/90">
-           {isSelectionMode ? <Check className="mr-2 h-4 w-4" /> : <Hand className="mr-2 h-4 w-4" />}
-           {isSelectionMode ? 'Selesai Memilih' : 'Pilih Properti'}
-        </Button>
-      </div>
     </div>
   );
 }
-
-    

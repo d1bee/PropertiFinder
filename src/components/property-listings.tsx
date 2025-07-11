@@ -34,7 +34,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [selectedPropertyForCard, setSelectedPropertyForCard] = useState<Property | null>(null);
-  const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [newPropertyCoords, setNewPropertyCoords] = useState<{lat: number; lng: number} | null>(null);
 
   const draggableRef = useRef<HTMLDivElement>(null);
@@ -62,13 +61,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   }, [selectedPropertyIds, viewMode]);
   
   useEffect(() => {
-    if (!isSelectionMode) {
-      setSelectedPropertyIds([]);
-    }
-  }, [isSelectionMode]);
-  
-  useEffect(() => {
-    setIsSelectionMode(false);
     setSelectedPropertyIds([]);
   }, [viewMode]);
 
@@ -121,19 +113,13 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   }, []);
 
   const handleMarkerClick = useCallback((property: Property) => {
-    if (isSelectionMode) {
-      togglePropertySelection(property.id);
-    } else {
-      setSelectedPropertyIds([]); 
-      setSelectedPropertyForCard(property);
-    }
-  }, [isSelectionMode, togglePropertySelection]);
+    setSelectedPropertyIds([]);
+    setSelectedPropertyForCard(property);
+  }, []);
 
   const handleMapClick = useCallback(() => {
-    if (!isSelectionMode) {
-        setSelectedPropertyForCard(null);
-    }
-  }, [isSelectionMode]);
+    setSelectedPropertyForCard(null);
+  }, []);
   
   const handleMapRightClick = useCallback((e: google.maps.MapMouseEvent) => {
     if (e.latLng) {
@@ -164,14 +150,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       setProperties(prev => [...prev, newProperty]);
       setIsAddDrawerOpen(false);
       setNewPropertyCoords(null);
-  };
-
-  const handleToggleSelectionMode = () => {
-    const newSelectionMode = !isSelectionMode;
-    setIsSelectionMode(newSelectionMode);
-    if (newSelectionMode) {
-      setSelectedPropertyForCard(null); 
-    }
   };
   
   return (
@@ -226,10 +204,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               onMapRightClick={handleMapRightClick}
               selectedPropertyIds={selectedPropertyIds}
               hoveredPropertyId={hoveredPropertyId}
-              isSelectionMode={isSelectionMode}
-              onToggleSelectionMode={handleToggleSelectionMode}
             />
-             {selectedPropertyForCard && !isSelectionMode && (
+             {selectedPropertyForCard && (
                <Draggable nodeRef={draggableRef} handle=".drag-handle" bounds="parent">
                 <div ref={draggableRef} className="absolute bottom-4 left-4 z-10 w-full max-w-sm cursor-grab">
                     <PropertyCard 
@@ -276,5 +252,3 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
     </div>
   );
 }
-
-    
