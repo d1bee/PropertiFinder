@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import type { Property } from '@/lib/data';
 import { PropertyMap } from '@/components/property-map';
 import { Header } from './header';
@@ -23,11 +23,8 @@ const parseAreaRange = (range: string): [number, number] => {
 
 export function PropertyListings({ properties, apiKey }: PropertyListingsProps) {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
   const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
-  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(searchParams.get('id'));
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
 
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
