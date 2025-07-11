@@ -728,5 +728,3 @@ export const properties: Property[] = [
     coordinates: { lat: 1.114, lng: 104.075 },
   },
 ];
-
-    
