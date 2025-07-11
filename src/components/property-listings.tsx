@@ -60,7 +60,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
     }
   }, [selectedPropertyIds, viewMode]);
   
-  // Reset selection mode when switching views
   useEffect(() => {
     setIsSelectionMode(false);
     setSelectedPropertyIds([]);
@@ -151,9 +150,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
 
   const handleToggleSelectionMode = () => {
     setIsSelectionMode(prev => !prev);
-    setSelectedPropertyForCard(null); // Close any open card when toggling mode
+    setSelectedPropertyForCard(null); 
     if (isSelectionMode) {
-      // Clear selections when exiting selection mode
       setSelectedPropertyIds([]);
     }
   };
@@ -171,10 +169,10 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
         }}
         onAddPropertyClick={() => setIsAddDrawerOpen(true)}
       />
-      <main className="flex-grow pt-[120px] sm:pt-32 flex flex-col">
+      <main className="flex-grow pt-[120px] sm:pt-40 flex flex-col">
         <div className="flex-grow relative">
           <div className={viewMode === 'list' ? 'block' : 'hidden'}>
-             <ScrollArea className="h-[calc(100vh-theme(spacing.32)-40px)] sm:h-[calc(100vh-theme(spacing.32))]">
+             <ScrollArea className="h-[calc(100vh-theme(spacing.40)-40px)] sm:h-[calc(100vh-theme(spacing.40))]">
                 <div className="container mx-auto px-4 py-4">
                   {filteredProperties.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
