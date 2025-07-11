@@ -36,6 +36,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const [selectedPropertyForCard, setSelectedPropertyForCard] = useState<Property | null>(null);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
 
+  const draggableRef = useRef<HTMLDivElement>(null);
 
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
@@ -62,6 +63,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   // Reset selection mode when switching views
   useEffect(() => {
     setIsSelectionMode(false);
+    setSelectedPropertyIds([]);
   }, [viewMode]);
 
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
@@ -169,10 +171,10 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
         }}
         onAddPropertyClick={() => setIsAddDrawerOpen(true)}
       />
-      <main className="flex-grow pt-32 flex flex-col">
+      <main className="flex-grow pt-[120px] sm:pt-32 flex flex-col">
         <div className="flex-grow relative">
           <div className={viewMode === 'list' ? 'block' : 'hidden'}>
-             <ScrollArea className="h-[calc(100vh-theme(spacing.32))]">
+             <ScrollArea className="h-[calc(100vh-theme(spacing.32)-40px)] sm:h-[calc(100vh-theme(spacing.32))]">
                 <div className="container mx-auto px-4 py-4">
                   {filteredProperties.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -211,8 +213,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               onToggleSelectionMode={handleToggleSelectionMode}
             />
              {selectedPropertyForCard && (
-               <Draggable handle=".drag-handle" bounds="parent">
-                <div className="absolute bottom-4 left-4 z-10 w-full max-w-sm cursor-grab">
+               <Draggable nodeRef={draggableRef} handle=".drag-handle" bounds="parent">
+                <div ref={draggableRef} className="absolute bottom-4 left-4 z-10 w-full max-w-sm cursor-grab">
                     <PropertyCard 
                     property={selectedPropertyForCard} 
                     isFloating 
