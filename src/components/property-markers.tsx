@@ -9,7 +9,7 @@ import { MarkerClusterer } from '@googlemaps/markerclusterer';
 interface PropertyMarkersProps {
   properties: Property[];
   onMarkerClick: (property: Property, event: google.maps.MapMouseEvent) => void;
-  selectedPropertyIds: string[];
+  selectedPropertyIds?: string[];
   hoveredPropertyId?: string | null;
 }
 
@@ -34,13 +34,13 @@ const getIcon = (selected: boolean, color: string) => {
 export function PropertyMarkers({
   properties,
   onMarkerClick,
-  selectedPropertyIds,
+  selectedPropertyIds = [],
   hoveredPropertyId,
 }: PropertyMarkersProps) {
   const map = useMap();
   const markers = useRef<Record<string, google.maps.Marker>>({});
   const clusterer = useRef<MarkerClusterer | null>(null);
-  const [primaryColor, setPrimaryColor] = useState('#262626');
+  const [primaryColor, setPrimaryColor] = useState('#8CB7B3'); // Default to Telur Asin Blue
 
   useEffect(() => {
     // This effect runs on the client and can access browser APIs like getComputedStyle
