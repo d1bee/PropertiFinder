@@ -6,16 +6,19 @@ import type { Property } from '@/lib/data';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { Badge } from './ui/badge';
+import { Checkbox } from './ui/checkbox';
 
 type PropertyCardProps = {
   property: Property;
   selected?: boolean;
+  onSelectionChange?: (checked: boolean) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onClick?: () => void;
   className?: string;
   isFloating?: boolean;
   onClose?: () => void;
+  showCheckbox?: boolean;
 };
 
 const formatPrice = (price: number) => {
@@ -43,19 +46,19 @@ const getAIHint = (type: Property['type']) => {
 export function PropertyCard({ 
   property, 
   selected = false, 
+  onSelectionChange,
   onMouseEnter, 
   onMouseLeave, 
   onClick, 
   className,
   isFloating = false,
-  onClose
+  onClose,
+  showCheckbox = false
 }: PropertyCardProps) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Prevent the Link from navigating when the card itself is clicked
-    // as the parent component might handle the navigation logic.
     if (onClick) {
       const target = e.target as HTMLElement;
-      if (!target.closest('a') && !target.closest('button')) {
+      if (!target.closest('a') && !target.closest('button') && !target.closest('[role="checkbox"]')) {
         e.preventDefault();
         onClick();
       }
@@ -73,6 +76,15 @@ export function PropertyCard({
             className={cn("object-cover w-full", isFloating ? "h-32" : "h-40")}
             data-ai-hint={getAIHint(property.type)}
           />
+        {showCheckbox && (
+           <div className="absolute top-2 left-2 bg-background/80 rounded-full p-1">
+            <Checkbox 
+              checked={selected}
+              onCheckedChange={onSelectionChange}
+              aria-label={`Select ${property.title}`}
+            />
+           </div>
+        )}
         {!isFloating && (
           <Button size="icon" variant="secondary" className="absolute top-2 right-2 rounded-full h-7 w-7 bg-card/70 hover:bg-card">
               <Heart className="h-4 w-4" />
@@ -132,7 +144,7 @@ export function PropertyCard({
       className={cn(
         "bg-card rounded-lg overflow-hidden border transition-all duration-300 flex flex-col", 
         !isFloating && "cursor-pointer h-full",
-        selected && !isFloating ? "shadow-2xl border-primary ring-2 ring-primary" : "hover:shadow-md hover:border-muted-foreground/50",
+        selected ? "shadow-2xl border-primary ring-2 ring-primary" : "hover:shadow-md hover:border-muted-foreground/50",
         isFloating && "shadow-2xl w-full",
         className
       )}

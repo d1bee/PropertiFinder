@@ -189,7 +189,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
               </CardHeader>
               <CardContent>
                 <div className="h-64 rounded-lg overflow-hidden">
-                    <Image src={`https://maps.googleapis.com/maps/api/staticmap?center=${property.coordinates.lat},${property.coordinates.lng}&zoom=15&size=600x400&markers=color:red%7C${property.coordinates.lat},${property.coordinates.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}`}
+                    <Image src={`https://maps.googleapis.com/maps/api/staticmap?center=${property.coordinates.lat},${property.coordinates.lng}&zoom=15&size=600x400&markers=color:blue%7C${property.coordinates.lat},${property.coordinates.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}`}
                         alt={`Map of ${property.title}`}
                         width={600}
                         height={400}

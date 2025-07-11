@@ -11,7 +11,7 @@ interface PropertyMapProps {
   apiKey?: string;
   onMarkerClick: (propertyId: string) => void;
   onMapClick: (e: google.maps.MapMouseEvent) => void;
-  selectedPropertyId?: string | null;
+  selectedPropertyIds: string[];
   hoveredPropertyId?: string | null;
   className?: string;
 }
@@ -21,7 +21,7 @@ export function PropertyMap({
   apiKey,
   onMarkerClick,
   onMapClick,
-  selectedPropertyId,
+  selectedPropertyIds,
   hoveredPropertyId,
   className
 }: PropertyMapProps) {
@@ -52,7 +52,7 @@ export function PropertyMap({
           <PropertyMarkers
             properties={properties}
             onMarkerClick={onMarkerClick}
-            selectedPropertyId={selectedPropertyId}
+            selectedPropertyIds={selectedPropertyIds}
             hoveredPropertyId={hoveredPropertyId}
           />
         </Map>

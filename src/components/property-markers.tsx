@@ -9,43 +9,32 @@ import { MarkerClusterer } from '@googlemaps/markerclusterer';
 interface PropertyMarkersProps {
   properties: Property[];
   onMarkerClick: (propertyId: string) => void;
-  selectedPropertyId?: string | null;
+  selectedPropertyIds: string[];
   hoveredPropertyId?: string | null;
 }
 
-const getIcon = (type: Property['type'], selected: boolean): google.maps.Icon => {
+const getIcon = (selected: boolean): google.maps.Icon | null => {
     if (typeof window === 'undefined' || !window.google) {
-        return {}; 
+        return null; 
     }
 
-    const MAP_PIN_PATH = 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z';
-    
-    let color = '#6B7280'; // Default color
-    switch(type) {
-        case 'Rumah': color = '#10B981'; break;
-        case 'Apartemen': color = '#3B82F6'; break;
-        case 'Tanah Kosong': color = '#F97316'; break;
-        case 'Gudang': color = '#6B7280'; break;
-        case 'Ruko': color = '#8B5CF6'; break;
-        case 'Galangan Kapal': color = '#06B6D4'; break;
-        case 'Pabrik': color = '#EF4444'; break;
-    }
-
-    return {
-        path: MAP_PIN_PATH,
-        fillColor: color,
+    const icon: google.maps.Icon = {
+        path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
+        fillColor: '#007BFF', // Blue dot
         fillOpacity: 1,
         strokeColor: 'white',
         strokeWeight: 1.5,
-        scale: selected ? 2 : 1.5,
+        scale: selected ? 2.2 : 1.5, // Make selected icon larger
         anchor: new google.maps.Point(12, 24),
     };
+
+    return icon;
 };
 
 export function PropertyMarkers({
   properties,
   onMarkerClick,
-  selectedPropertyId,
+  selectedPropertyIds,
   hoveredPropertyId,
 }: PropertyMarkersProps) {
   const map = useMap();
@@ -74,19 +63,25 @@ export function PropertyMarkers({
     const markersToAdd = [];
     // Add new markers or update existing ones
     for (const property of properties) {
-      const isSelected = property.id === selectedPropertyId || property.id === hoveredPropertyId;
+      const isSelected = selectedPropertyIds.includes(property.id);
+      const isHovered = property.id === hoveredPropertyId;
+      
+      const icon = getIcon(isSelected || isHovered);
+
+      if (!icon) continue;
+
       if (!markers.current[property.id]) {
         const marker = new google.maps.Marker({
           position: property.coordinates,
           title: property.title,
-          icon: getIcon(property.type, isSelected),
+          icon: icon,
         });
         marker.addListener('click', () => onMarkerClick(property.id));
         markers.current[property.id] = marker;
         markersToAdd.push(marker);
       } else {
         // Update icon for selection/hover state
-        markers.current[property.id].setIcon(getIcon(property.type, isSelected));
+        markers.current[property.id].setIcon(icon);
         markers.current[property.id].setPosition(property.coordinates);
       }
     }
@@ -97,8 +92,8 @@ export function PropertyMarkers({
     
     clusterer.current.render();
     
-  }, [map, properties, onMarkerClick, selectedPropertyId, hoveredPropertyId]);
+  }, [map, properties, onMarkerClick, selectedPropertyIds, hoveredPropertyId]);
 
 
-  return null; // The markers are managed directly on the map instance
+  return null;
 }

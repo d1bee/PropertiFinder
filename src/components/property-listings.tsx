@@ -12,6 +12,7 @@ import { ScrollArea } from './ui/scroll-area';
 import { PropertyCard } from './property-card';
 import { AddPropertyForm } from './add-property-form';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from './ui/drawer';
+import { Button } from './ui/button';
 
 interface PropertyListingsProps {
   apiKey?: string;
@@ -29,7 +30,7 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const router = useRouter();
   const [properties, setProperties] = useState<Property[]>(initialPropertiesData);
   const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
-  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
+  const [selectedPropertyIds, setSelectedPropertyIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
 
@@ -44,17 +45,28 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
-    if (selectedPropertyId && viewMode === 'list' && cardRefs.current[selectedPropertyId]) {
-      cardRefs.current[selectedPropertyId]?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-      });
+    if (selectedPropertyIds.length > 0 && viewMode === 'list') {
+      const lastSelectedId = selectedPropertyIds[selectedPropertyIds.length - 1];
+      if (cardRefs.current[lastSelectedId]) {
+        cardRefs.current[lastSelectedId]?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        });
+      }
     }
-  }, [selectedPropertyId, viewMode]);
+  }, [selectedPropertyIds, viewMode]);
 
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
+  
+  const togglePropertySelection = useCallback((propertyId: string) => {
+    setSelectedPropertyIds(prev =>
+      prev.includes(propertyId)
+        ? prev.filter(id => id !== propertyId)
+        : [...prev, propertyId]
+    );
+  }, []);
 
   const filteredProperties = useMemo(() => {
     let sortedProperties = [...properties];
@@ -82,11 +94,6 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       return searchTermMatch && propertyTypeMatch && buildingAreaMatch && landAreaMatch;
     });
   }, [properties, filters]);
-
-  const selectedProperty = useMemo(() => {
-    if (!selectedPropertyId) return null;
-    return filteredProperties.find(p => p.id === selectedPropertyId);
-  }, [selectedPropertyId, filteredProperties]);
   
   const handleCardClick = useCallback((property: Property) => {
      router.push(`/properties/${property.id}`);
@@ -97,21 +104,17 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
   }, []);
 
   const handleMarkerClick = useCallback((propertyId: string) => {
-    setSelectedPropertyId(propertyId);
-     if (viewMode === 'list' && cardRefs.current[propertyId]) {
-      cardRefs.current[propertyId]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [viewMode]);
+    togglePropertySelection(propertyId);
+  }, [togglePropertySelection]);
 
   const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
-    setSelectedPropertyId(null);
+    // This can be used to clear selections, or for other interactions
   }, []);
 
   const handleAddProperty = (newPropertyData: Omit<Property, 'id' | 'coordinates'>) => {
       const newProperty: Property = {
         id: (properties.length + 100).toString(),
         ...newPropertyData,
-        // Assign a random coordinate in Batam for now
         coordinates: {
           lat: 1.118 + (Math.random() - 0.5) * 0.1,
           lng: 104.048 + (Math.random() - 0.5) * 0.1,
@@ -119,7 +122,8 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
       };
       setProperties(prev => [...prev, newProperty]);
       setIsAddDrawerOpen(false);
-      setSelectedPropertyId(newProperty.id);
+      // Optionally select the new property
+      // setSelectedPropertyIds([newProperty.id]);
   };
   
   return (
@@ -142,11 +146,13 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
                       {filteredProperties.map(property => (
                          <div key={property.id} ref={el => (cardRefs.current[property.id] = el)}>
                             <PropertyCard
-                            property={property}
-                            selected={property.id === selectedPropertyId || property.id === hoveredPropertyId}
-                            onMouseEnter={() => handleCardHover(property.id)}
-                            onMouseLeave={() => handleCardHover(null)}
-                            onClick={() => handleCardClick(property)}
+                              property={property}
+                              selected={selectedPropertyIds.includes(property.id)}
+                              onSelectionChange={() => togglePropertySelection(property.id)}
+                              showCheckbox
+                              onMouseEnter={() => handleCardHover(property.id)}
+                              onMouseLeave={() => handleCardHover(null)}
+                              onClick={() => handleCardClick(property)}
                             />
                         </div>
                       ))}
@@ -166,23 +172,27 @@ export function PropertyListings({ apiKey, properties: initialPropertiesData }: 
               apiKey={apiKey}
               onMarkerClick={handleMarkerClick}
               onMapClick={handleMapClick}
-              selectedPropertyId={selectedPropertyId}
+              selectedPropertyIds={selectedPropertyIds}
               hoveredPropertyId={hoveredPropertyId}
               className={viewMode === 'list' ? 'hidden' : ''}
             />
           </div>
 
-          {viewMode === 'map' && selectedProperty && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-10">
-              <PropertyCard 
-                property={selectedProperty} 
-                isFloating 
-                onClose={() => setSelectedPropertyId(null)}
-              />
-            </div>
-          )}
         </div>
       </main>
+
+       {selectedPropertyIds.length > 0 && (
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-20 w-full max-w-md">
+            <div className="bg-background rounded-lg shadow-2xl p-4 m-4 flex items-center justify-between">
+                <p className="font-semibold">{selectedPropertyIds.length} properti dipilih</p>
+                <div className="flex gap-2">
+                    <Button variant="ghost" onClick={() => setSelectedPropertyIds([])}>Bersihkan</Button>
+                    <Button>Bandingkan</Button>
+                </div>
+            </div>
+          </div>
+       )}
+
        <Drawer open={isAddDrawerOpen} onOpenChange={setIsAddDrawerOpen}>
         <DrawerContent>
            <DrawerHeader className="text-left">
