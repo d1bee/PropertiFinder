@@ -10,8 +10,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Download, FileText } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 
 const formatPrice = (price: number) => {
@@ -47,7 +45,10 @@ const exportToExcel = (properties: Property[]) => {
     XLSX.writeFile(workbook, 'property_comparison.xlsx');
 };
 
-const exportToPdf = () => {
+const exportToPdf = async () => {
+    const { default: jsPDF } = await import('jspdf');
+    const { default: html2canvas } = await import('html2canvas');
+
     const input = document.getElementById('comparison-content');
     if (input) {
         html2canvas(input, { scale: 2 }).then(canvas => {
