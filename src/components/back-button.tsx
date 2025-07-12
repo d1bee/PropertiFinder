@@ -29,7 +29,7 @@ function BackButtonComponent() {
 
 export function BackButton() {
   return (
-    <Suspense fallback={<div className="h-10 mb-4" />}>
+    <Suspense fallback={<div className="h-10 mb-4 w-28 rounded-md bg-muted animate-pulse" />}>
       <BackButtonComponent />
     </Suspense>
   )
