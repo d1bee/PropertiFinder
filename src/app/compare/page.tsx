@@ -1,16 +1,13 @@
 
-'use client';
-
 import { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { properties, type Property } from '@/lib/data';
 import { BackButton } from '@/components/back-button';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Download, FileText } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { properties, type Property } from '@/lib/data';
 import * as XLSX from 'xlsx';
-
 
 const formatPrice = (price: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -81,6 +78,8 @@ const exportToPdf = async () => {
 };
 
 function ComparePageComponent() {
+    'use client';
+    
     const searchParams = useSearchParams();
     const ids = searchParams.get('ids')?.split(',') || [];
     const selectedProperties = properties.filter(p => ids.includes(p.id));
