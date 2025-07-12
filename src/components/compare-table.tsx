@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, FileText } from 'lucide-react';
+import { BackButton } from './back-button';
 
 const formatPrice = (price: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -89,6 +90,13 @@ export function CompareTable() {
 
     return (
         <>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <BackButton />
+                    <h1 className="text-3xl font-bold tracking-tight text-primary">Perbandingan Properti</h1>
+                    <p className="text-muted-foreground">Bandingkan fitur-fitur properti pilihan Anda secara berdampingan.</p>
+                </div>
+            </div>
             <div className="flex justify-end gap-2 mb-4">
                 <Button onClick={handleExportExcel} disabled={selectedProperties.length === 0}>
                     <Download className="mr-2 h-4 w-4" />
